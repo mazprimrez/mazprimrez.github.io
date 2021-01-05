@@ -1,0 +1,79 @@
+body{
+	font-family: 'Roboto', 'Helvetica', Times New Rowman;
+	font-size: 1.5vw;
+}
+
+p.title{
+	font-size: 3vw;
+	text-align: center;
+}
+
+p.small {
+ 	line-height: 5vw;
+ 	font-size: 5vw;
+ 	/*letter-spacing: 3vw;*/
+}
+
+p.place {
+ 	margin-top:-6vw;
+ 	font-size: 3vw;
+ 	line-height: 6vw
+}
+
+a.non{
+	opacity: 0.2;
+	color:#000;
+}
+
+a.active{
+	opacity:1;
+}
+
+.year{
+	opacity: 0.5;
+}
+
+.col-right {
+	text-align: right;
+}
+
+.col-left {
+	text-align: left;
+}
+
+h5{
+	padding-top: 1vw;
+}
+
+@media screen and (max-width: 600px) {
+	.col{
+		font-size: 4vw;
+	}
+
+	p.small{
+		font-size: 5vw;
+	}
+
+	p.place {
+	 	margin-top:-9vw;
+	 	font-size: 6vw;
+	 	line-height: 6vw
+	}
+
+	p.title{
+		font-size: 8vw;
+		text-align: center;
+	}
+
+	.col-right {
+    	text-align: center;
+  	}
+
+	.col-left {
+    	text-align: center;
+  	}
+
+  	h5{
+  		font-size: 5vw;
+  	}
+}
