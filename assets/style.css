@@ -1,0 +1,12 @@
+a {
+    text-decoration: none !important;
+}
+
+.card-text {
+    overflow-y: auto;
+    height: 10vh;
+}
+
+.card-tag {
+    max-height: 0.5vh;
+}
