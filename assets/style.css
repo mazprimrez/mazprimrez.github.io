@@ -1,3 +1,7 @@
+body{
+    max-width: 98%;
+}
+
 a {
     text-decoration: none !important;
 }
@@ -9,4 +13,22 @@ a {
 
 .card-tag {
     max-height: 0.5vh;
+}
+
+.btnf {
+    color: teal;
+}
+
+.color-teal {
+    color: teal;
+}
+
+.row {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.row>* {
+    padding-right: 0;
+    padding-left: 0;
 }

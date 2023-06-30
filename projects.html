@@ -23,36 +23,35 @@
     <br>
     <br>
     <div class="container">
-        <h1>What I Did👩‍🔬</h1>
+        <h1>What I Do👩‍🔬</h1>
         <p>In my free time, I often do projects for fun. Some of them are imitating what I did as a professional and the rest are for upgrading my knowledge and skills. Check them out!</p>
     </div>
     
 
-    <div id="myBtnContainer" class="container d-flex justify-content-center">
-        <button class="btn btnf active filter-button" data-filter="all">#all-projects</button>
-        <button class="btn btnf filter-button" data-filter="recsys">#recommendation-system</button>
-        <button class="btn btnf filter-button" data-filter="timeseries">#time-series</button>
-        <button class="btn btnf filter-button" disabled>#coming-more</button>
+    <div id="myBtnContainer" class="row d-flex justify-content-center">
+        <button class="btn btnf active filter-button col-lg-1 col-sm-4" data-filter="all">#all-projects</button>
+        <button class="btn btnf filter-button col-lg-1 col-sm-4" data-filter="recsys" data-bs-toggle="tooltip" title="Recommendation System">#rec-sys</button>
+        <button class="btn btnf filter-button col-lg-1 col-sm-4" data-filter="timeseries" data-bs-toggle="tooltip" title="Time Series Analysis">#time-series</button>
+        <button class="btn btnf filter-button col-lg-1 col-sm-4" disabled">#coming-more</button>
     </div>
 
-    <div class="container d-flex justify-content-center">
-
+    <div class="row container d-flex justify-content-center">
+      <div class="row justify-content-md-center mx-auto">
          <!-- Forecast card-->
-      <div class="row">
-         <div class="card ms-3 mt-3 filter timeseries" style="width: 18rem;display: inline-block;">
+         <div class="card ms-3 mt-3 filter timeseries col-lg-3 col-sm-6" style="width: 18rem;display: inline-block;">
             <img src="assets/image/On Going.png" class="card-img-top" alt="Supply Chain">
             <div class="card-body">
               <h5 class="card-title">Ecommerce Sales Forecast using Prophet</h5>
               <p class="card-text mb-0">In supply chain, it is important to predict tomorrow's sales, so the company could prepare for more precise stock and lessen the loss.</p>
               <a href="https://www.kaggle.com/code/maziprimareza/ecommerce-sales-forecast-using-prophet" class="btn btn-outline-secondary" target="_blank">Kaggle</a>
               <p class="card-tag">
-                <a href="#">#time-series</a>
+                <a href="#" class="color-teal">#time-series</a>
               </p>
             </div>
           </div>
 
         <!-- Zeeflix card-->
-        <div class="card ms-3 mt-3 filter recsys" style="width: 18rem;display: inline-block;">
+        <div class="card ms-3 mt-3 filter recsys col-lg-3 col-sm-6" style="width: 18rem;display: inline-block;">
             <img src="assets/image/zeeflix.png" class="card-img-top" alt="A recommendation system webpage">
             <div class="card-body">
                 <h5 class="card-title">Zeeflix - Multistage recommendation System</h5>
@@ -60,20 +59,20 @@
               <a href="https://zeeflix-5e68.onrender.com/" class="btn btn-outline-secondary" target="_blank">Web-app</a>
               <a href="https://github.com/mazprimrez/zeeflix" class="btn btn-outline-secondary" target="_blank">GitHub</a>
               <p class="card-tag">
-                <a href="#">#recsys</a>
+                <a href="#" class="color-teal">#recsys</a>
               </p>
             </div>
         </div>
 
         <!--Cold-start problem card-->
-        <div class="card ms-3 mt-3 filter recsys" style="width: 18rem; display: inline-block;">
+        <div class="card ms-3 mt-3 filter recsys col-lg-3 col-sm-6" style="width: 18rem; display: inline-block;">
             <img src="assets/image/medium-asso-rules.png" class="card-img-top" alt="A recommendation system webpage">
             <div class="card-body">
               <h5 class="card-title">Cold Start Users with Association Rules RecSys</h5>
               <p class="card-text mb-0">Most of the time cold-start users are hard to handle since we only have a little information about them, giving them trending is the most popular and simple way to do that. In the article, I elaborate on how to hand cold start users using popular data mining technique, association rules.</p>
               <a href="https://medium.com/@sparklingdust/handle-cold-start-problem-using-association-rules-ee66ce43b265" class="btn btn-outline-secondary" target="_blank">Medium</a>
               <p class="card-tag">
-                <a href="#">#recsys</a>
+                <a href="#" class="color-teal">#recsys</a>
               </p>
             </div>
         </div>
