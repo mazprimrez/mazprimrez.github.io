@@ -6,8 +6,13 @@ a {
     text-decoration: none !important;
 }
 
-.h1 {
+h1 {
     font-family: 'Montserrat';
+    font-weight: 900;
+}
+
+h4 {
+    line-height: 1.6;
 }
 
 .card-text {
@@ -44,7 +49,7 @@ a {
 
 /* width */
 ::-webkit-scrollbar {
-width: 2px;
+width: 4px;
 }
 
 /* Track */
