@@ -35,21 +35,37 @@
 
     <div class="col-md-9 col-sm-12 col-xs-12 ">
     <div id="myBtnContainer" class="row d-flex justify-content-center">
-        <button class="btn btnf active filter-button col-lg-1 col-sm-4" data-filter="all">#all-projects</button>
+        <button class="btn btnf active filter-button col-lg-1 col-sm-4" data-filter="all">#all</button>
         <button class="btn btnf filter-button col-lg-1 col-sm-4" data-filter="recsys" data-bs-toggle="tooltip" title="Recommendation System">#rec-sys</button>
         <button class="btn btnf filter-button col-lg-1 col-sm-4" data-filter="timeseries" data-bs-toggle="tooltip" title="Time Series Analysis">#time-series</button>
+        <button class="btn btnf filter-button col-lg-1 col-sm-4" data-filter="nlp" data-bs-toggle="tooltip" title="Natural Language Processing">#nlp</button>
         <button class="btn btnf filter-button col-lg-1 col-sm-4" disabled>#coming-more</button>
     </div>
 
     <div class="row container d-flex justify-content-center">
       <div class="row justify-content-md-center mx-auto">
+
+        <!-- coming soon card-->
+        <div class="card ms-3 mt-3 filter nlp col-lg-3 col-sm-6" style="width: 18rem;display: inline-block;">
+          <img src="assets/image/On Going.png" class="card-img-top" alt="Supply Chain" height="150px">
+          <div class="card-body">
+            <h5 class="card-title">Comment Segmentation</h5>
+            <p class="card-text mb-0">Real feedbacks from human are needed, yet there are so many text to read. By using text segmentation, we'll know the most written topics in a specific product and generate action item faster.</p>
+            <a href="#" class="btn btn-outline-secondary btn-text" target="_blank">-</a>
+            <p class="card-tag">
+              <a href="#" class="color-teal">#natural-language-processing</a>
+            </p>
+          </div>
+        </div>
+
          <!-- Forecast card-->
          <div class="card ms-3 mt-3 filter timeseries col-lg-3 col-sm-6" style="width: 18rem;display: inline-block;">
-            <img src="assets/image/On Going.png" class="card-img-top" alt="Supply Chain">
+            <img src="assets/image/prophet.png" class="card-img-top" alt="Supply Chain" height="120px">
             <div class="card-body">
               <h5 class="card-title">Ecommerce Sales Forecast using Prophet</h5>
-              <p class="card-text mb-0">In supply chain, it is important to predict future sales, hence the company could prepare for more precise stocks based on predicted demand and lessen the loss.</p>
-              <a href="https://www.kaggle.com/code/maziprimareza/ecommerce-sales-forecast-using-prophet" class="btn btn-outline-secondary" target="_blank">Kaggle</a>
+              <p class="card-text mb-0">Unlock the Full Potential of Your Ecommerce Business! Accurate sales prediction in the supply chain is vital for precise inventory planning, minimizing losses, and optimizing operational efficiency. With advanced forecasting models, companies can align their stock levels with anticipated demand, reducing the risk of stockouts and excess inventory.</p>
+              <a href="https://www.kaggle.com/code/maziprimareza/ecommerce-sales-forecast-using-prophet" class="btn btn-outline-secondary btn-text" target="_blank">Kaggle</a>
+              <a href="https://docs.google.com/presentation/d/14KyGeSOj47n4IV8Rlz7MTYMQG3Dqpc-AnM5rN0GRlEc/edit?usp=sharing" class="btn btn-outline-secondary btn-text" target="_blank">Deck PPT</a>
               <p class="card-tag">
                 <a href="#" class="color-teal">#time-series</a>
               </p>
@@ -62,10 +78,10 @@
             <div class="card-body">
                 <h5 class="card-title">Zeeflix - Multistage recommendation System</h5>
                 <p class="card-text mb-0">A multi-stage recommendation web-app. Two stages processing are used to generate a better recommendation for users, those are candidate retrieval and learning to rank algorithm.</p>
-              <a href="https://zeeflix-5e68.onrender.com/" class="btn btn-outline-secondary" target="_blank">Web-app</a>
-              <a href="https://github.com/mazprimrez/zeeflix" class="btn btn-outline-secondary" target="_blank">GitHub</a>
+              <a href="https://zeeflix-5e68.onrender.com/" class="btn btn-outline-secondary btn-text" target="_blank">Web-app</a>
+              <a href="https://github.com/mazprimrez/zeeflix" class="btn btn-outline-secondary btn-text" target="_blank">GitHub</a>
               <p class="card-tag">
-                <a href="#" class="color-teal">#recsys</a>
+                <a href="#" class="color-teal">#recommendation-system</a>
               </p>
             </div>
         </div>
@@ -76,9 +92,9 @@
             <div class="card-body">
               <h5 class="card-title">Cold Start Users with Association Rules RecSys</h5>
               <p class="card-text mb-0">Most of the time cold-start users are hard to handle because we only have a little information about them. In the article, I elaborate on how to handle cold start users using popular data mining technique, association rules.</p>
-              <a href="https://medium.com/@sparklingdust/handle-cold-start-problem-using-association-rules-ee66ce43b265" class="btn btn-outline-secondary" target="_blank">Medium</a>
+              <a href="https://medium.com/@sparklingdust/handle-cold-start-problem-using-association-rules-ee66ce43b265" class="btn btn-outline-secondary btn-text" target="_blank">Medium</a>
               <p class="card-tag">
-                <a href="#" class="color-teal">#recsys</a>
+                <a href="#" class="color-teal">#recommendation-system</a>
               </p>
             </div>
         </div>

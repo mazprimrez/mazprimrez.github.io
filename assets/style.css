@@ -18,10 +18,26 @@ h4 {
 .card-text {
     overflow-y: auto;
     height: 10vh;
+    padding-bottom: 5px;
 }
 
 .card-tag {
     max-height: 0.5vh;
+}
+
+.btn {
+    margin-left: 0px;
+    margin-right: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+
+.btn-text {
+    margin: 2px;
+    margin-top: 5px;
+    margin-left: 0px;
+    padding:5px;
+    font-size: 13px;
 }
 
 .btnf {
