@@ -17,7 +17,7 @@ h4 {
 
 .card-text {
     overflow-y: auto;
-    height: 12vh;
+    max-height: 12vh;
     padding-bottom: 5px;
 }
 
