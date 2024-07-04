@@ -34,22 +34,40 @@
 
     <div class="container position-absolute top-50 start-50 translate-middle">
       <div class="row">
-        <h1>Hello, I'm <span class="color-teal">Mazi</span>!👋🏼</h1>
-        <h3>a data scientist.</h3>
-        <hr class="col-lg-8 col-sm-12">
+        <h1>Hello, I'm <span class="color-teal">Mazi</span>!</h1>
+        <h3>a data scientist👋🏼.</h3>
+        <br><br><br>
+        <!-- chatbot start here -->
+        <div class="row">
+          <div class="col-sm-7">
+            <div class="form-group">
+              <input id="user-input" class="form-control custom-input" type="text" rows="1", placeholder="Ask me anything and I'll answer immediately!"></input>
+            </div>
+          </div>
+          <div class="col-sm-4">
+            <button type="submit" onclick="sendMessage()" id="send-button" class="btn btn-custom">Send!</button>
+          </div>
+
+          <div id="response-container" class="response-container">
+              <!-- The bot's response will be displayed here -->
+              <p id="response-output" class="col-lg-8 col-sm-12 card-body" style="padding:10px; max-height: 75px; height: 40px; overflow-y: scroll;"></p>
+          </div>
+          <script src="assets\scripts\send-button.js"></script>
+        </div>
+        <!-- chatobt end here -->
+        <!-- <hr class="col-lg-8 col-sm-12"> -->
       </div>
-      <br><br>
+      
       <div class="row">
-        <h4 class="col-lg-6 col-sm-12">I utilize million rows of data to increase users engagement by building <span class="mark-teal">recommendation systems</span> and implementing <span class="mark-teal">machine learning</span> models at <a href="http://vidio.com" class="color-teal" target="_blank">Vidio</a>, a leading streaming service company in Indonesia!</h4>
+        <h4 class="col-lg-6 col-sm-12">I utilize million rows of data to automate daily tasks by implementing <span class="mark-teal">Generative AI</span> and <span class="mark-teal">Machine Learning</span> models.
       </div>
       <br>
         <a href="https://github.com/mazprimrez", target="_blank", class="btn btn-outline-secondary mx-2 ms-0 text-dark">GitHub</a>
         <a href="https://www.linkedin.com/in/maziprimareza/", target="_blank", class="btn btn-outline-secondary mx-2 text-dark">LinkedIn</a>
-        <a href="https://medium.com/@sparklingdust", target="_blank", class="btn btn-outline-secondary mx-2 text-dark">Medium</a>
         <a href="mailto:maziprimareza@gmail.com", target="_blank", class="btn btn-outline-secondary mx-2 text-dark">Email</a>
         <a href="https://public.tableau.com/app/profile/mazi.prima.reza/vizzes", target="_blank", class="btn btn-outline-secondary mx-2 text-dark">Tableau Public</a>
-        <br><br>
         <p>Checkout my <a href="projects.html" class="color-teal">projects &#10141;</a> </p>
+
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>

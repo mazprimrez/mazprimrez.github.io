@@ -7,12 +7,21 @@ a {
 }
 
 h1 {
-    font-family: 'Montserrat';
+    font-family: 'Merriweather';
     font-weight: 900;
+    font-size: 12vh;
+}
+
+h3 {
+    font-family: 'Merriweather';
 }
 
 h4 {
     line-height: 1.6;
+}
+
+.bg-teal {
+    background-color: teal;
 }
 
 .card-text {
@@ -39,6 +48,13 @@ h4 {
     padding:5px;
     font-size: 13px;
 }
+
+.btn-custom {
+    background-color:teal; /* Custom green button background color */
+    border-color: #427E7F; /* Custom green button border color */
+    color: white;
+    border-radius: 0;
+  }
 
 .btnf {
     color: teal;
@@ -81,4 +97,14 @@ background: #888;
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
 background: #555;
+}
+
+.form-group {
+    padding-right: 15px;
+}
+
+.custom-input {
+    border: none;
+    border-bottom: 2px solid teal;
+    border-radius: 0;
 }
