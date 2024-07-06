@@ -108,3 +108,52 @@ background: #555;
     border-bottom: 2px solid teal;
     border-radius: 0;
 }
+
+/* style for timeline */
+
+.work-custom {
+    font-size: large;
+    padding-top: 1vh;
+}
+
+/* Y-axis */
+.timeline-25 {
+    content: '';
+    position: absolute;
+    left: 25%;
+    top:25%;
+    width: 2px;
+    height: 70%;
+    background: #ccc; /* Color of the axis */
+    z-index: -9;
+}
+
+/* Y-axis */
+.timeline-50 {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top:25%;
+    width: 2px;
+    height: 70%;
+    background: #ccc; /* Color of the axis */
+    z-index: -9;
+}
+
+/* Y-axis */
+.timeline-75 {
+    content: '';
+    position: absolute;
+    left: 75%;
+    top:25%;
+    width: 2px;
+    height: 70%;
+    background: #ccc; /* Color of the axis */
+    z-index: -9;
+}
+
+@media (max-width: 768px) {
+    .timeline-50 {
+        display: none;
+    }
+}
