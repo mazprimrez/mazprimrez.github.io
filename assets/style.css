@@ -156,4 +156,21 @@ background: #555;
     .timeline-50 {
         display: none;
     }
+
+    .timeline-25 {
+        display: none;
+    }
+
+    .timeline-75 {
+        display: none;
+    }
+}
+
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.2) !important; /* Change the last value (0.3) to adjust the transparency */
+}
+
+.modal-body {
+    max-height: 50vh; /* Adjust the height as needed */
+    overflow-y: auto; /* Enable vertical scrolling */
 }
