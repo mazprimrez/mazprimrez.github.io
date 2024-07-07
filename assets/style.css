@@ -116,14 +116,18 @@ background: #555;
     padding-top: 1vh;
 }
 
+.timeline-container {
+    position: relative;
+    width: 100%; /* Adjust as needed */
+}
+
 /* Y-axis */
 .timeline-25 {
     content: '';
     position: absolute;
     left: 25%;
-    top:25%;
     width: 2px;
-    height: 70%;
+    height: 100%;
     background: #ccc; /* Color of the axis */
     z-index: -9;
 }
@@ -133,9 +137,8 @@ background: #555;
     content: '';
     position: absolute;
     left: 50%;
-    top:25%;
     width: 2px;
-    height: 70%;
+    height: 100%;
     background: #ccc; /* Color of the axis */
     z-index: -9;
 }
@@ -145,12 +148,27 @@ background: #555;
     content: '';
     position: absolute;
     left: 75%;
-    top:25%;
     width: 2px;
-    height: 70%;
+    height: 100%;
     background: #ccc; /* Color of the axis */
     z-index: -9;
 }
+
+/* Default for small screens */
+.container-small {
+    position: relative;
+}
+
+/* For large screens and above */
+@media (min-width: 992px) {
+    .container-small {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+}
+
 
 @media (max-width: 768px) {
     .timeline-50 {
@@ -164,6 +182,15 @@ background: #555;
     .timeline-75 {
         display: none;
     }
+
+    .img-thumbnail{
+        display: none;
+    }
+
+    .title-custom {
+        margin-left: 0px;
+        margin-top: 0%;
+    }
 }
 
 .modal-backdrop {
@@ -173,4 +200,26 @@ background: #555;
 .modal-body {
     max-height: 50vh; /* Adjust the height as needed */
     overflow-y: auto; /* Enable vertical scrolling */
+}
+
+.timeline-container {
+    position: relative;
+    width: 100%; /* Adjust as needed */
+}
+
+.img-thumbnail {
+    width: 20vw;
+    opacity: 0.7;
+    filter: grayscale(50%); 
+}
+
+.img-thumbnail:hover {
+    filter: grayscale(10%); 
+}
+
+.title-custom {
+    margin-right: -7vw;
+    margin-top: 10%;
+    z-index: 1;
+    text-align: right;
 }

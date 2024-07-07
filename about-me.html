@@ -20,7 +20,8 @@
     <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
   </head>
   <body>
-    <ul class="nav nav-underline justify-content-end mx-5">
+    <div class="row">
+      <ul class="nav nav-underline justify-content-end">
         <li class="nav-item">
           <a class="nav-link text-black-50" aria-current="page" href="index.html">Home</a>
         </li>
@@ -31,88 +32,104 @@
           <a class="nav-link text-black-50" href="projects.html">Projects</a>
         </li>
       </ul>
+    </div>
     <br>
     <br>
 
     <div class="container">
-        <div class="row">
-            <h1>It's Mazi!</h1>
+        <div class="row" style="margin-bottom: 5vh;">
+          <div class="col-md-5 col-sm-10">
+            <div class="row">
+              <div class="col-md-5 col-sm-10 title-custom">
+                <h1>It's Mazi!</h1>
+              </div>
+              <div class="col-md-7 col-sm-0 image-custom" style="text-align: right;">
+                <img src="assets/image/20240619_080025.jpg" class="img-thumbnail img-fluid">
+              </div>
+            </div>
+          </div>
+          <div class="col-md-7 col-sm-12">
+            <h3 style="font-size: 50px;">I'm a <span class="mark-teal">Data Scientist</span> who work from anywhere at an IT consulting company at Jakarta, Indonesia.</h3>
+            <p>In 3-year professional experience as a Data Scientist, I have various projects from recommendation system, churn prediction, to time series prediction. Now I mainly focus on building AI products to automate daily tasks utilizing Generative AI and Machine Learning models.</p>
+          </div>
+        </div>
 
-            <div class="timeline-25"></div>
-            <div class="timeline-50"></div>
-            <div class="timeline-75"></div>
+        <div class="row timeline-container">
+          <div class="timeline-25"></div>
+          <div class="timeline-50"></div>
+          <div class="timeline-75"></div>
 
-            <div class="row m-2">
-              <div class="col-md-9 col-sm-0"></div> <!--fake container-->
-              <div class="col-md-3 col-sm-10 bg-teal text-white p-2 border rounded-5" data-bs-toggle="modal" data-bs-target="#metrodataModal" type="button"> <!--real container start here-->
-                <div class="row" style="align-items: center; align-content: center;">
-                  <div class="col-8">
-                    <h3 style="text-align: right; padding-right: 1vw; line-height: 2.5vh;" class="align-middle">
-                      Data Scientist <span class="work-custom">at Metrodata</span>
-                    </h3>
-                  </div>
-                  <div class="col-4">
-                    <h3>Apr 24-Present</h3>
-                  </div>
+          <div class="row m-2">
+            <div class="col-md-9 col-sm-0"></div> <!--fake container-->
+            <div class="col-md-3 col-sm-10 bg-teal text-white p-2 border rounded-5" data-bs-toggle="modal" data-bs-target="#metrodataModal" type="button"> <!--real container start here-->
+              <div class="row" style="align-items: center; align-content: center;">
+                <div class="col-8">
+                  <h3 style="text-align: right; padding-right: 1vw; line-height: 2.5vh;" class="align-middle">
+                    Data Scientist <span class="work-custom">at Metrodata</span>
+                  </h3>
+                </div>
+                <div class="col-4">
+                  <h3>Apr 24-Present</h3>
                 </div>
               </div>
             </div>
+          </div>
 
-            <div class="row m-2">
-              <div class="col-5"></div>
-              <div class="col-md-4 col-sm-10 bg-teal text-white p-2 border rounded-5" data-bs-toggle="modal" data-bs-target="#vidioModal" type="button"> <!--real container start here-->
-                <div class="row" style="align-items: center; align-content: center;">
-                  <div class="col-8">
-                    <h3 style="text-align: right; padding-right: 1vw; line-height: 2.5vh;" class="align-middle">
-                      Data Scientist <span class="work-custom">at Vidio</span>
-                    </h3>
-                  </div>
-                  <div class="col-4">
-                    <h3>Nov 20-<br>Apr 24</h3>
-                  </div>
+          <div class="row m-2">
+            <div class="col-5"></div>
+            <div class="col-md-4 col-sm-10 bg-teal text-white p-2 border rounded-5" data-bs-toggle="modal" data-bs-target="#vidioModal" type="button"> <!--real container start here-->
+              <div class="row" style="align-items: center; align-content: center;">
+                <div class="col-8">
+                  <h3 style="text-align: right; padding-right: 1vw; line-height: 2.5vh;" class="align-middle">
+                    Data Scientist <span class="work-custom">at Vidio</span>
+                  </h3>
                 </div>
-              </div>
-              <div class="col-3"></div>
-            </div>
-
-            <div class="row m-2">
-              <div class="col-7"></div>
-              <div class="col-md-5 col-sm-10 bg-teal text-white p-2 border rounded-5" data-bs-toggle="modal" data-bs-target="#teachingModal" type="button"> <!--real container start here-->
-                <div class="row" style="align-items: center; align-content: center;">
-                  <div class="col-8">
-                    <h3 style="text-align: right; padding-right: 1vw; line-height: 2.5vh;" class="align-middle">
-                      Teaching and Mentoring <span class="work-custom">at Various Programs</span>
-                    </h3>
-                  </div>
-                  <div class="col-4">
-                    <h3>Jun 22-<br>Present</h3>
-                  </div>
+                <div class="col-4">
+                  <h3>Nov 20-<br>Apr 24</h3>
                 </div>
               </div>
             </div>
+            <div class="col-3"></div>
+          </div>
 
-            <div class="row m-2">
-              <div class="col-1"></div>
-              <div class="col-md-4 col-sm-10 bg-teal text-white p-2 border rounded-5" data-bs-toggle="modal" data-bs-target="#itbModal" type="button"> <!--real container start here-->
-                <div class="row" style="align-items: center; align-content: center;">
-                  <div class="col-8">
-                    <h3 style="text-align: right; padding-right: 1vw; line-height: 2.5vh;" class="align-middle">
-                      Mathematics Major <span class="work-custom">at Institut Teknologi Bandung</span>
-                    </h3>
-                  </div>
-                  <div class="col-4">
-                    <h3>Aug 16-<br>Oct 20</h3>
-                  </div>
+          <div class="row m-2">
+            <div class="col-7"></div>
+            <div class="col-md-5 col-sm-10 bg-teal text-white p-2 border rounded-5" data-bs-toggle="modal" data-bs-target="#teachingModal" type="button"> <!--real container start here-->
+              <div class="row" style="align-items: center; align-content: center;">
+                <div class="col-8">
+                  <h3 style="text-align: right; padding-right: 1vw; line-height: 2.5vh;" class="align-middle">
+                    Teaching and Mentoring <span class="work-custom">at Various Programs</span>
+                  </h3>
+                </div>
+                <div class="col-4">
+                  <h3>Jun 22-<br>Present</h3>
                 </div>
               </div>
-              <div class="col-9"></div>
-
-            <div class="row m-2">
-                <div class="col-md-2 col-sm-10 bg-teal text-white p-2 border rounded-5" style="text-align: center;"><h3>&#8592; Before</h3></div>
-                <div class="col-md-10 col-sm-0"></div>
             </div>
+          </div>
 
+          <div class="row m-2">
+            <div class="col-1"></div>
+            <div class="col-md-4 col-sm-10 bg-teal text-white p-2 border rounded-5" data-bs-toggle="modal" data-bs-target="#itbModal" type="button"> <!--real container start here-->
+              <div class="row" style="align-items: center; align-content: center;">
+                <div class="col-8">
+                  <h3 style="text-align: right; padding-right: 1vw; line-height: 2.5vh;" class="align-middle">
+                    Mathematics Major <span class="work-custom">at Institut Teknologi Bandung</span>
+                  </h3>
+                </div>
+                <div class="col-4">
+                  <h3>Aug 16-<br>Oct 20</h3>
+                </div>
+              </div>
             </div>
+            <div class="col-9"></div>
+
+          <div class="row m-2">
+              <div class="col-md-2 col-sm-10 bg-teal text-white p-2 border rounded-5" data-bs-toggle="modal" data-bs-target="#miscModal" type="button" style="text-align: center;"><h3>&#8592; Before</h3></div>
+              <div class="col-md-10 col-sm-0"></div>
+          </div>
+
+          </div>
         </div>
     </div>
 
@@ -169,6 +186,20 @@
           </div>
           <div class="modal-body">
             <div id="itbContent"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- beforeModal -->
+    <div class="modal fade" id="miscModal" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header" style="background-color: teal;">
+            <h5 class="modal-title" style="color: white;">Others</h5>
+          </div>
+          <div class="modal-body">
+            <div id="miscContent"></div>
           </div>
         </div>
       </div>

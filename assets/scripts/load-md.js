@@ -49,4 +49,8 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('[data-bs-target="#itbModal"]').addEventListener('click', () => {
         loadModalContent('itb');
     });
+
+    document.querySelector('[data-bs-target="#miscModal"]').addEventListener('click', () => {
+        loadModalContent('misc');
+    });
 });
