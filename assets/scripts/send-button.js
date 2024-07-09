@@ -20,7 +20,7 @@ function sendMessage() {
     sendButton.disabled = true;
 
     // Call the API
-    fetch('https://hello-cloud-run-ohhznk3qna-et.a.run.app/predict', {
+    fetch('https://resume-chatbot-ohhznk3qna-et.a.run.app/predict', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
