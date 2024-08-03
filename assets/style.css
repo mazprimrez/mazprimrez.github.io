@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: auto !important;
+}
+
 body{
     max-width: 98%;
 }
@@ -207,13 +211,13 @@ background: #555;
     width: 100%; /* Adjust as needed */
 }
 
-.img-thumbnail {
+.img-thumbnail-custom {
     width: 20vw;
     opacity: 0.7;
     filter: grayscale(50%); 
 }
 
-.img-thumbnail:hover {
+.img-thumbnail-custom:hover {
     filter: grayscale(10%); 
 }
 
