@@ -16,7 +16,7 @@ function sendMessage() {
     const sendButton = document.getElementById('send-button');
 
     // Show loading state on the button
-    sendButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...';
+    sendButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>';
     sendButton.disabled = true;
 
     // Call the API
@@ -30,7 +30,7 @@ function sendMessage() {
         .then(response => response.json())
         .then(data => {
             // Hide loading state on the button
-            sendButton.innerHTML = 'Send!';
+            sendButton.innerHTML = '<i class="bi bi-send-fill"></i>';
             sendButton.disabled = false;
             // Display bot's response
             displayResponse(data.prediction);

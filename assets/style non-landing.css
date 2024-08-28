@@ -4,7 +4,7 @@ html {
 
 body{
     max-width: 98%;
-    background-color: white;
+    background-color: #f2efea;
 }
 
 a {
@@ -28,7 +28,6 @@ h3 {
 h4 {
     line-height: 1.6;
 }
-
 
 .icon-custom {
     font-size: 20px;
@@ -298,7 +297,7 @@ background: #555;
 .img-thumbnail-custom {
     width: 20vw;
     opacity: 0.7;
-    filter: grayscale(50%); 
+    /* filter: grayscale(50%);  */
 }
 
 .img-thumbnail-custom:hover {
