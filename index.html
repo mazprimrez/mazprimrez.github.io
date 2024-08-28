@@ -13,16 +13,26 @@
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Mazi Prima Reza | Data Scientist</title>
+    <title>Mazi Prima Reza | Data Scientist/AI Engineer</title>
     <link rel="shortcut icon" type="image/png" href="assets/image/favicon.webp"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <link href="assets/style.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&display=swap" rel="stylesheet">
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+  
+  <style>
+    body{
+      background-color: #fbf9fb;
+    }
+  </style>
 
   </head>
   <body>
-    <div class="row">
-      <ul class="nav nav-underline justify-content-end">
+    <div class="row small-screen">
+      <ul class="nav nav-underline justify-content-center">
         <li class="nav-item">
           <a class="nav-link active" aria-current="page" href="#">Home</a>
         </li>
@@ -32,49 +42,66 @@
         <li class="nav-item">
           <a class="nav-link text-black-50" href="projects.html">Projects</a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link text-black-50" href="contact.html">Contact</a>
+        </li>
       </ul>
     </div>
 
+
     <div class="container container-small">
-      <div class="row">
-        <h1>Hello, I'm <span class="color-teal">Mazi</span>!</h1>
-        <h3>a Data Scientist/AI Engineer👋🏼.</h3>
-        <br><br><br>
-        <!-- chatbot start here -->
         <div class="row">
-          <div class="col-sm-7">
-            <div class="form-group">
-              <input id="user-input" class="form-control custom-input" type="text" rows="1", placeholder="Ask me anything and I'll answer immediately!"></input>
+            <div class="col-lg-4 col-md-2 left-container">
+
+              <div class="row">
+                <a href=""><h2>/home</h2></a>
+                <a href="about-me.html"><h2>/about me</h2></a>
+                <a href="projects.html"><h2>/selected project</h2></a>
+                <a href="contact.html"><h2>/contact</h2></a>
+              </div>
+              
             </div>
-          </div>
-          <div class="col-sm-4">
-            <button type="submit" onclick="sendMessage()" id="send-button" class="btn btn-custom">Send!</button>
-          </div>
+            <div class="col-lg-4 col-md-8">
+                <div class="container text-center">
+                    <img src="assets/image/me.webp" class="img-thumbnail rounded-circle" style="max-width: 40%;">
+                    <div class="container border rounded-5 text-center shadow p-3 mb-2" style="margin-top: -10vh; background-color: white;">
+                        <div class="row" style="margin-top: 10vh;">
+                            <h1>Hello, I'm <span class="color-green">Mazi</span>!</h1>
+                            <h4>a Data Scientist/AI Engineer👋🏼</h4>
 
-          <div id="response-container" class="response-container">
-              <!-- The bot's response will be displayed here -->
-              <p id="response-output" class="col-lg-8 col-sm-12 card-body" style="padding:10px; height: 9vh; overflow-y: scroll;"></p>
-          </div>
-          <script src="assets\scripts\send-button.js"></script>
+                            <p>I utilize million rows of data to build AI products by implementing <span class="color-orange fw-bold">Generative AI</span> and <span class="color-orange fw-bold">Machine Learning</span> models.</p>
+
+                            <div class="row">
+                                <div class="col-sm-10">
+                                  <div class="form-group">
+                                    <input id="user-input" class="form-control custom-input" type="text" rows="1", placeholder="Talk to my assistant👩🏻‍💼"></input>
+                                  </div>
+                                </div>
+                                <div class="col-sm-2">
+                                  <button type="submit" onclick="sendMessage()" id="send-button" class="btn btn-custom" style="width: 100%;"><i class="bi bi-send-x"></i></button>
+                                </div>
+                      
+                                <div id="response-container" class="response-container text-left">
+                                    <!-- The bot's response will be displayed here -->
+                                    <p id="response-output" class="col-lg-12 col-sm-12 card-body text-left" style="padding:10px; height: 11vh; overflow-y: auto;"></p>
+                                </div>
+                                <script src="assets\scripts\send-button.js"></script>
+                            </div>
+                              <!-- chatobt end here -->
+                              <!-- <hr class="col-lg-8 col-sm-12"> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-2 right-container">
+              <div class="row text-right">
+                <a href="https://github.com/mazprimrez" target="_blank"><i class="bi bi-github icon-custom"></i></a>
+                <a href="https://www.linkedin.com/in/maziprimareza/" target="_blank"><i class="bi bi-linkedin icon-custom"></i></a>
+                <a href="mailto:maziprimareza@gmail.com", target="_blank"><i class="bi bi-envelope-fill icon-custom"></i></a>
+              </div>
+            </div>
+
         </div>
-        <!-- chatobt end here -->
-        <!-- <hr class="col-lg-8 col-sm-12"> -->
-      </div>
-      
-      <div class="row">
-        <h4 class="col-lg-6 col-sm-12">I utilize million rows of data to build AI products by implementing <span class="mark-teal">Generative AI</span> and <span class="mark-teal">Machine Learning</span> models.
-      </div>
-      <br>
-        <a href="https://github.com/mazprimrez", target="_blank", class="btn btn-outline-secondary mx-2 ms-0 text-dark">GitHub</a>
-        <a href="https://www.linkedin.com/in/maziprimareza/", target="_blank", class="btn btn-outline-secondary mx-2 text-dark">LinkedIn</a>
-        <a href="mailto:maziprimareza@gmail.com", target="_blank", class="btn btn-outline-secondary mx-2 text-dark">Email</a>
-        <a href="https://public.tableau.com/app/profile/mazi.prima.reza/vizzes", target="_blank", class="btn btn-outline-secondary mx-2 text-dark">Tableau Public</a>
-        <p>Checkout my <a href="projects.html" class="color-teal">projects &#10141;</a> </p>
-
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js" integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
   </body>
-</html>
+  </html>
