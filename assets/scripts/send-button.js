@@ -20,7 +20,7 @@ function sendMessage() {
     sendButton.disabled = true;
 
     // Call the API
-    fetch('https://resume-chatbot-latest.onrender.com/predict', {
+    fetch('https://resume-chatbot-grd6b9eebrfhftat.eastus-01.azurewebsites.net/predict', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
