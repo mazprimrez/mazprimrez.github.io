@@ -20,7 +20,7 @@ function sendMessage() {
     sendButton.disabled = true;
 
     // Call the API
-    fetch('https://resume-chatbot-grd6b9eebrfhftat.eastus-01.azurewebsites.net/predict', {
+    fetch('https://mazis-resume-chatbot.azurewebsites.net/predict', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
