@@ -15,38 +15,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Mazi Prima Reza | Data Scientist/AI Engineer</title>
     <link rel="shortcut icon" type="image/png" href="assets/image/favicon.webp"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link href="assets/style.css" rel="stylesheet">
-    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
-
+    <style>
+      .contact-container {
+        max-width: 500px;
+        background: #ffffff;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      }
+      .contact-header {
+        color: teal;
+        font-weight: 600;
+      }
+      .contact-icons a:hover {
+        color: #FF6B6B;
+      }
+      .contact-icons a {
+        color: teal; /* Change to green on hover */
+        margin: 0 10px;
+        transition: color 0.3s;
+      }
+    </style>
   </head>
   <body>
-    <div class="row">
-        <ul class="nav nav-underline justify-content-center">
-          <li class="nav-item">
-            <a class="nav-link text-black-50" aria-current="page" href="index.html">Home</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-black-50" href="about-me.html">About Me</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link text-black-50" href="projects.html">Projects</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" href="contact.html">Contact</a>
-          </li>
-        </ul>
+     <!-- Navigation Bar -->
+     <div class="container my-3">
+      <div class="row">
+          <ul class="nav nav-underline justify-content-center">
+              <li class="nav-item">
+                  <a class="nav-link text-black-50" aria-current="page" href="index.html">Home</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link text-black-50" href="about-me.html">About</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link text-black-50" href="projects.html">Projects</a>
+              </li>
+              <li class="nav-item">
+                  <a class="nav-link active" href="contact.html">Contact</a>
+              </li>
+          </ul>
       </div>
+  </div>
 
-    <div class="container container-small" style="text-align: center;">
-        <h1>Contact Me</h1>
-        <a href="https://github.com/mazprimrez" target="_blank"><i class="bi bi-github h2"></i></a>
-        <a href="https://www.linkedin.com/in/maziprimareza/" target="_blank"><i class="bi bi-linkedin h2"></i></a>   
-        <a href="mailto:maziprimareza@gmail.com", target="_blank"><i class="bi bi-envelope-fill h2"></i></a>   
+    <div class="container d-flex flex-column align-items-center justify-content-center min-vh-100">
+      <div class="contact-container text-center">
+        <h1 class="contact-header display-5">Get in Touch!📎</h1>
+        <p class="text-muted">I'd love to connect with you! You can find me on these platforms</p>
+        
+        <!-- Social Media Links -->
+        <div class="contact-icons mt-4">
+          <a href="https://github.com/mazprimrez" target="_blank"><i class="bi bi-github h1"></i></a>
+          <a href="https://www.linkedin.com/in/maziprimareza/" target="_blank"><i class="bi bi-linkedin h1"></i></a>
+          <a href="mailto:maziprimareza@gmail.com" target="_blank"><i class="bi bi-envelope-fill h1"></i></a>
+        </div>
+      </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
   </body>
-  </html>
+</html>

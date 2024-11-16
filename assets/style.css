@@ -19,6 +19,7 @@ a:hover{
 h1 {
     font-family: "Chakra Petch", sans-serif;
     font-weight: 700;
+    font-size: 7vw;
 }
 
 h3 {
@@ -204,39 +205,17 @@ background: #555;
 @media (min-width: 768px) {
     .container-small {
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        width: 100%;
+        bottom: 0%;
     }
 
     .left-container{
-        margin-top:0%;
-        margin-right: 0%;
         text-align: right;
-        z-index: -9;
-        opacity: 0;
-        transition: all 1s;
-    }
-
-    .container-small:hover .left-container{
-        margin-top:10%;
-        transition: all 1s;
-        z-index: 0;
-        opacity: 1;
+        bottom: 0%;
     }
 
     .right-container{
-        margin-top: 20%;
-        z-index: -9;
-        opacity: 0;
-        transition: all 1s;
-    }
-
-    .container-small:hover .right-container{
-        margin-top: 10%;
-        z-index: 0;
-        opacity: 1;
-        transition: all 1s;
+        bottom: 0%;
     }
 }
 
@@ -263,11 +242,11 @@ background: #555;
     }
 
     .left-container{
-        display: None;
+        display: auto;
     }
     
     .right-container{
-        display: None;
+        display: auto;
     }
 
     .small-screen{
@@ -306,8 +285,17 @@ background: #555;
 }
 
 .title-custom {
-    margin-right: -7vw;
-    margin-top: 10%;
     z-index: 1;
+    font-size: 199rem;
     text-align: right;
+}
+
+#response-output h3 {
+    color: teal;
+    font-size: 1.2em;
+}
+
+#response-output strong {
+    color: #333;
+    font-weight: bold;
 }
