@@ -1,0 +1,208 @@
+/* ============================================================
+   Mazi — Journal Portfolio · Design System
+   Soft pink paper · handwritten accents · gentle motion
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400;1,6..72,500&family=Nunito:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+:root {
+  /* Pinks */
+  --pink-50:  #FFF6F9;
+  --pink-100: #FFEAF1;
+  --pink-150: #FFDDE9;
+  --pink-200: #FBCCDD;
+  --pink-300: #F4A6C0;
+  --rose-400: #EC85A6;
+  --rose-500: #DD6A92;
+  --rose-600: #C44E78;
+
+  /* Warm ink + paper */
+  --ink:      #4A3540;   /* warm plum-brown text */
+  --ink-soft: #6E5762;
+  --ink-faint:#9C8590;
+  --cream:    #FFFBF4;
+  --paper:    #FFFDFA;
+
+  /* Secondary tag colors */
+  --sage:   #9DB89A;
+  --sage-d: #6E9269;
+  --blue:   #9DB6C9;
+  --blue-d: #5E83A0;
+  --honey:  #E8C07A;
+  --honey-d:#C99B43;
+  --lilac:  #BBA8D6;
+  --lilac-d:#8A72B4;
+
+  /* Type */
+  --hand:  'Caveat', cursive;
+  --serif: 'Newsreader', Georgia, serif;
+  --sans:  'Nunito', system-ui, sans-serif;
+
+  /* Structure */
+  --radius: 14px;
+  --shadow-soft: 0 10px 30px -16px rgba(120, 60, 85, 0.35);
+  --shadow-card: 0 18px 40px -22px rgba(120, 60, 85, 0.45);
+  --line-dash: 2px dashed var(--pink-300);
+  --maxw: 1080px;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  color: var(--ink);
+  background-color: #ffffff;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+a { color: inherit; }
+
+img { max-width: 100%; display: block; }
+
+/* ---------- Typography helpers ---------- */
+.hand {
+  font-family: var(--hand);
+  line-height: 1.1;
+  color: var(--rose-500);
+}
+.serif { font-family: var(--serif); }
+
+h1, h2, h3 { font-family: var(--serif); font-weight: 500; color: var(--ink); margin: 0; line-height: 1.15; }
+
+.eyebrow {
+  font-family: var(--hand);
+  font-size: clamp(1.4rem, 2.4vw, 1.9rem);
+  color: var(--rose-400);
+  transform: rotate(-2deg);
+  display: inline-block;
+}
+
+.lead { font-size: 1.18rem; color: var(--ink-soft); }
+
+/* shared layout container */
+.wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
+
+/* ============================================================
+   App shell + page transitions
+   ============================================================ */
+#root { min-height: 100vh; display: flex; flex-direction: column; }
+
+.page {
+  flex: 1;
+  opacity: 1;
+  padding-bottom: 90px;
+}
+.page > * { animation: pageIn 0.45s cubic-bezier(.2,.7,.3,1); }
+@keyframes pageIn {
+  from { transform: translateY(10px); }
+  to   { transform: translateY(0); }
+}
+
+/* ============================================================
+   Navbar
+   ============================================================ */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.86);
+  border-bottom: 1px solid rgba(74, 53, 64, 0.06);
+}
+.nav-inner {
+  max-width: var(--maxw); margin: 0 auto;
+  padding: 16px 28px;
+  display: flex; align-items: center; justify-content: center;
+}
+.brand {
+  display: flex; align-items: baseline; gap: 13px;
+  text-decoration: none;
+}
+.brand .mark {
+  font-family: var(--hand); font-size: 2rem; font-weight: 700;
+  color: var(--rose-500);
+}
+.brand .mark-sub {
+  font-family: var(--sans); font-size: .72rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--ink-faint);
+}
+.nav-links { display: flex; align-items: center; gap: 10px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; justify-content: center; }
+.nav-links a {
+  text-decoration: none; color: var(--ink-soft);
+  font-weight: 600; font-size: .95rem;
+  padding: 8px 14px; border-radius: 999px;
+  position: relative; transition: color .2s, background .2s;
+}
+.nav-links a:hover { color: var(--rose-600); }
+.nav-links a.active { color: var(--rose-600); }
+.nav-links a.active::after {
+  content: ''; position: absolute; left: 12px; right: 12px; bottom: 2px; height: 7px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='8' viewBox='0 0 80 8'%3E%3Cpath d='M1 5 C 18 1, 30 8, 45 4 S 70 1, 79 4' stroke='%23EC85A6' stroke-width='2.4' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / 100% 100%;
+}
+.nav-toggle { display: none; }
+
+@media (max-width: 720px) {
+  .nav-inner { padding: 13px 16px; }
+  .nav-links { gap: 4px; }
+  .nav-links a { padding: 8px 12px; font-size: .9rem; }
+}
+
+/* ============================================================
+   Buttons + tags
+   ============================================================ */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--sans); font-weight: 700; font-size: .98rem;
+  text-decoration: none; cursor: pointer;
+  padding: 12px 22px; border-radius: 999px;
+  border: 2px solid var(--ink);
+  background: var(--rose-500); color: #fff;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform .15s, box-shadow .15s;
+}
+.btn:hover { transform: translate(-2px,-2px); box-shadow: 5px 5px 0 var(--ink); }
+.btn:active { transform: translate(1px,1px); box-shadow: 1px 1px 0 var(--ink); }
+.btn.ghost { background: var(--paper); color: var(--ink); }
+
+.tag {
+  display: inline-flex; align-items: center; gap: 5px;
+  font-family: var(--sans); font-weight: 700; font-size: .8rem;
+  padding: 5px 12px; border-radius: 999px;
+  border: 1.5px solid currentColor;
+  background: var(--pink-100); color: var(--rose-600);
+  white-space: nowrap;
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.footer {
+  border-top: var(--line-dash);
+  background: rgba(255,255,255,0.4);
+  padding: 30px 0;
+  margin-top: auto;
+}
+.footer-inner {
+  max-width: var(--maxw); margin: 0 auto; padding: 0 28px;
+  display: flex; justify-content: space-between; align-items: center;
+  flex-wrap: wrap; gap: 14px;
+  color: var(--ink-faint); font-size: .9rem;
+}
+.footer .heart { color: var(--rose-400); }
+.footer-soc { display: flex; gap: 16px; }
+.footer-soc a { color: var(--ink-soft); text-decoration: none; font-weight: 600; }
+.footer-soc a:hover { color: var(--rose-600); }
+
+/* ============================================================
+   Scroll reveal
+   ============================================================ */
+.reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.3,1); }
+.reveal.in { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, .page { animation: none !important; transition: none !important; }
+  .reveal { opacity: 1; transform: none; }
+}
