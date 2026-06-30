@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Personal photos (freediving / concerts) — keep these out of Google Images,
+# while the rest of the site (including this page's text) stays indexable.
+Disallow: /assets/images/freediving-*.jpg
+Disallow: /assets/images/freediving-*.png
+Disallow: /assets/images/concert-*.jpg
+Disallow: /assets/images/concert-*.png

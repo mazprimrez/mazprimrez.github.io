@@ -25,6 +25,7 @@ const ROUTES = {
   '#/':         Home,
   '#/about':    About,
   '#/projects': Projects,
+  '#/hobbies':  Hobbies,
   '#/contact':  Contact,
 };
 

@@ -122,7 +122,7 @@ function About() {
           </section>
         )}
 
-        <SecHead eyebrow="how it all unfolded" title="My journey so far" />
+        <SecHead title="My journey so far" />
         <p className="tl-hint reveal">← scroll left to travel back in time</p>
       </div>
 
@@ -279,6 +279,95 @@ function Projects() {
   );
 }
 
+/* ===================== HOBBIES ===================== */
+function PhotoPlaceholder({ src, alt, fit }) {
+  return (
+    <div className={`hob-photo${fit === 'contain' ? ' hob-photo--contain' : ''}`}>
+      <img src={src} alt={alt}
+           loading="lazy"
+           onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'grid'; }} />
+      <div className="ph" style={{ display: 'none' }}>add photo</div>
+    </div>
+  );
+}
+
+function Hobbies() {
+  useReveal();
+  return (
+    <main className="page hobbies-page">
+      <div className="wrap">
+
+        <section className="hob-hero reveal">
+          <h1 className="hob-h1">
+            <span className="eyebrow hob-ey">life beyond working</span>
+            <span className="hob-title">Hobbies</span>
+          </h1>
+          <p className="lead">A few things I love to do, beyond the work.</p>
+        </section>
+
+        {/* 01 — Freediving */}
+        <section className="hob-section reveal">
+          <span className="hob-num">01 — blurp blurp blurp🫧</span>
+          <h2>Freediving</h2>
+          <p className="hob-text">
+            I joined an open trip to Sebesi Island in Lampung at the beginning of 2026. I had a snorkling session and thought it'd be fun to dive down and get closer to the reefs. That's how I decided to apply for AIDA2 certification. <span className="hl">My personal best: STA 2mins 7secs, DYNB 40meters, CTW 15meters</span> (basically the minimum requirements for AIDA2 is my PB LOL).
+            Just earned my <span className="hl">AIDA 2</span> this June. (the reason this page is created, i want the whole world to know that im a certified freediver :p)
+          </p>
+          <div className="hob-gallery">
+            {FREEDIVE_PHOTOS.map((f, i) => (
+              <PhotoPlaceholder key={f} src={`assets/images/${f}`}
+                                 alt={f.includes('cert') ? 'AIDA 2 certification' : `Freediving photo ${i + 1}`}
+                                 fit={f.includes('cert') ? 'contain' : undefined} />
+            ))}
+          </div>
+          <p className="hob-scroll-hint">scroll →</p>
+        </section>
+
+        {/* 02 — Books */}
+        <section className="hob-section reveal">
+          <span className="hob-num">02 — Reading!</span>
+          <h2>Books</h2>
+          <p className="hob-text">
+            What I've been reading lately, from my{' '}
+            <a className="hob-link" href={GOODREADS_URL} target="_blank" rel="noreferrer">Goodreads</a>.
+          </p>
+          <iframe className="gr-widget-frame" title="Goodreads — read shelf"
+                  srcDoc={GR_WIDGET_HTML} loading="lazy" />
+          <a className="gr-badge" href={GOODREADS_URL} target="_blank" rel="noreferrer">goodreads</a> <span> - </span>
+          <a className="gr-badge" href={STORY_GRAPH_URL} target="_blank" rel="noreferrer">storygraph</a>
+        </section>
+
+        {/* 03 — Strava */}
+        <section className="hob-section reveal">
+          <span className="hob-num">03 — I'm on my late 20s, my body needs workout.</span>
+          <h2>Workout!</h2>
+          <p className="hob-text">
+            In 2023, I never believed I'd be diagnosed as obese, since my body weighed only 40kg at the time. Yet I never knew my body fat was 35%. In 2025, I hit the gym and felt much better since then. I love the gym more than anything — oh, and I also run and swim for fun. — all log to{' '}
+            <a className="hob-link" href={STRAVA_URL} target="_blank" rel="noreferrer">Strava</a>.
+          </p>
+          <a className="gr-badge" href={STRAVA_URL} target="_blank" rel="noreferrer">View my Strava →</a>
+        </section>
+
+        {/* 04 — Swiftie */}
+        <section className="hob-section reveal">
+          <span className="hob-num">04 — Forever in my Eras era</span>
+          <h2>Swiftie</h2>
+          <p className="hob-text">
+            Taylor Swift has been with me since I was 11. She has to be mentioned if i want to tell the story of my life. From singing her songs alone in my bedroom to singing along with her in the <span className="hl">Eras Tour Singapore row 6 seat 19 on a random Thursday, March 7th 2024.</span>
+          </p>
+          <div className="hob-gallery">
+            {CONCERT_PHOTOS.map((f, i) => (
+              <PhotoPlaceholder key={f} src={`assets/images/${f}`} alt={`Concert photo ${i + 1}`} />
+            ))}
+          </div>
+          <p className="hob-scroll-hint">scroll →</p>
+        </section>
+
+      </div>
+    </main>
+  );
+}
+
 /* ===================== CONTACT ===================== */
 function Contact() {
   useReveal();
@@ -309,4 +398,4 @@ function Contact() {
   );
 }
 
-Object.assign(window, { Home, About, Projects, Contact });
+Object.assign(window, { Home, About, Projects, Hobbies, Contact });
