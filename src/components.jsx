@@ -8,8 +8,37 @@ const NAV = [
   { path: '#/',         label: 'Home' },
   { path: '#/about',    label: 'About' },
   { path: '#/projects', label: 'Projects' },
+  { path: '#/hobbies',  label: 'Beyond Working' },
   { path: '#/contact',  label: 'Contact' },
 ];
+
+const GOODREADS_URL = "https://www.goodreads.com/review/list/68761275-mazi-reza?shelf=read";
+const STRAVA_URL = "https://www.strava.com/athletes/143377025";
+const STORY_GRAPH_URL = "https://app.thestorygraph.com/profile/sparklingdust"
+
+// Official Goodreads "grid widget" embed for the read shelf — rendered inside
+// an iframe (srcdoc) because the widget script uses document.write, which
+// would otherwise blow away our SPA's DOM if inserted directly into the page.
+const GR_WIDGET_HTML = `      <style type="text/css" media="screen">
+        .gr_grid_container {
+          /* customize grid container div here. eg: width: 700px; */
+        }
+
+        .gr_grid_book_container {
+          /* customize book cover container div here */
+          float: left;
+          width: 98px;
+          height: 160px;
+          padding: 0px 0px;
+          overflow: hidden;
+        }
+      </style>
+      <div id="gr_grid_widget_1782751168">
+      <script src="https://www.goodreads.com/review/grid_widget/68761275.Mazi's%20bookshelf:%20read?cover_size=medium&hide_link=&hide_title=&num_books=19&order=d&shelf=read&sort=date_read&widget_id=1782751168" type="text/javascript" charset="utf-8"></script>
+`;
+
+const FREEDIVE_PHOTOS = ["freediving-cert.png", "freediving-2.jpg", "freediving-3.jpg"];
+const CONCERT_PHOTOS = ["concert-1.jpg", "concert-2.jpg", "concert-3.jpg"];
 
 const TIMELINE = [
   { when: "Aug ’16 — Oct ’20", role: "B.Sc. Mathematics", org: "Institut Teknologi Bandung",
@@ -248,4 +277,5 @@ const Doodles = {
 };
 
 Object.assign(window, { useReveal, Nav, Footer, SecHead, Doodles,
-  NAV, TIMELINE, SKILLS, PROJECTS, FILTERS, CONTACTS });
+  NAV, TIMELINE, SKILLS, PROJECTS, FILTERS, CONTACTS,
+  GOODREADS_URL, STRAVA_URL, GR_WIDGET_HTML, FREEDIVE_PHOTOS, CONCERT_PHOTOS });
