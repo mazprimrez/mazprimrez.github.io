@@ -358,66 +358,6 @@
 .tag.honey { background:#FBF1DC; color: var(--honey-d); }
 .tag.lilac { background:#F0EBF7; color: var(--lilac-d); }
 
-/* ---------------- HOBBIES ---------------- */
-.hob-hero { text-align: center; padding: 60px 0 36px; }
-.hob-h1 { font-size: clamp(2.2rem, 5vw, 3.6rem); }
-.hob-ey { font-size: clamp(1.2rem, 2.2vw, 1.6rem); margin-right: 12px; vertical-align: 4px; }
-.hob-title { position: relative; display: inline-block; }
-.hob-title::after {
-  content: ''; position: absolute; left: -6px; right: -6px; bottom: -14px; height: 14px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='12' viewBox='0 0 200 12'%3E%3Cpath d='M2 7 C50 2 80 11 110 6 S180 2 198 6' stroke='%23F4A6C0' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / 100% 100%;
-}
-.hob-hero .lead { margin-top: 8px; }
-
-.hob-section { margin: 64px 0; }
-.hob-section h2 { font-size: clamp(1.8rem, 3.6vw, 2.4rem); margin-bottom: 14px; }
-.hob-num {
-  display: block; font-family: var(--sans); font-weight: 800; font-size: .78rem;
-  letter-spacing: .12em; text-transform: uppercase; color: var(--rose-400); margin-bottom: 6px;
-}
-.hob-num.small { margin-bottom: 2px; }
-.hob-text { color: var(--ink-soft); font-size: 1.05rem; max-width: 800px; line-height: 1.7; margin: 0 0 22px; }
-.hob-link { color: var(--rose-500); font-weight: 800; text-decoration: underline; text-decoration-color: var(--pink-300); }
-.hob-link:hover { color: var(--rose-600); }
-.hob-text .hl { background: linear-gradient(transparent 60%, var(--pink-200) 60%); padding: 0 3px; }
-
-.hob-gallery {
-  display: flex; gap: 18px; overflow-x: auto;
-  padding: 6px 4px 16px; scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;
-}
-.hob-gallery::-webkit-scrollbar { height: 8px; }
-.hob-gallery::-webkit-scrollbar-thumb { background: var(--pink-200); border-radius: 999px; }
-.hob-gallery::-webkit-scrollbar-track { background: var(--pink-50); border-radius: 999px; }
-.hob-photo {
-  flex: 0 0 auto; height: 320px; min-width: 200px; border-radius: 14px; overflow: hidden;
-  background: var(--pink-100); box-shadow: var(--shadow-soft); scroll-snap-align: start;
-}
-.hob-photo img { height: 100%; width: 100%; display: block; object-fit: cover; }
-.hob-photo--contain img { object-fit: contain; }
-.hob-photo .ph {
-  width: 200px; height: 100%; display: grid; place-items: center;
-  color: var(--rose-400); font-family: var(--hand); font-size: 1.3rem; text-align: center;
-}
-.hob-scroll-hint { font-family: var(--hand); color: var(--rose-400); font-size: 1.2rem; margin: -8px 0 28px; }
-
-.gr-widget-frame {
-  width: 100%; max-width: 800px; height: 230px; border: none;
-  display: block; margin-bottom: 6px;
-}
-
-.gr-badge {
-  display: inline-block; margin-top: 18px; padding: 6px 18px;
-  border: 1.5px solid var(--ink-faint); border-radius: 999px;
-  color: var(--ink-faint); font-weight: 700; font-size: .85rem;
-  text-decoration: none; letter-spacing: .02em; transition: all .15s;
-}
-.gr-badge:hover { border-color: var(--rose-500); color: var(--rose-500); }
-
-@media (max-width: 520px) {
-  .hob-photo { height: 240px; min-width: 160px; }
-  .book-card { flex-wrap: wrap; }
-}
-
 /* ---------------- CONTACT (single non-scrolling screen) ---------------- */
 .contact-page {
   padding-bottom: 0;
