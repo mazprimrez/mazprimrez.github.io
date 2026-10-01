@@ -50,6 +50,7 @@ function Home() {
 
 /* ===================== ABOUT ===================== */
 function About() {
+  const content = useSiteContent();
   const [open, setOpen] = useStateP(null);
   const [storyOpen, setStoryOpen] = useStateP(false);
   useReveal();
@@ -67,7 +68,12 @@ function About() {
     requestAnimationFrame(toEnd);
     const t = setTimeout(toEnd, 250);
     return () => clearTimeout(t);
-  }, []);
+  }, [content]);
+
+  if (!content) return <main className="page about-page"></main>;
+  const { about, timeline, skills } = content;
+  const entry = open !== null ? timeline[open] : null;
+
   return (
     <main className="page about-page">
       <div className="wrap">
@@ -76,49 +82,38 @@ function About() {
             <Doodles.flower className="doodle" style={{ top: '-22px', right: '-12px' }} />
             <div className="polaroid" style={{ transform: 'rotate(-3deg)' }}>
               <span className="tape t1"></span>
-              <img src="assets/images/me.jpg"
-                   alt="Mazi Prima Reza"
-                   onError={(e)=>{e.target.style.display='none'; e.target.nextSibling.style.display='grid';}} />
-              <div className="ph" style={{ display: 'none' }}>your photo<br/>goes here ✏️</div>
+              {about.photo.url && (
+                <img src={about.photo.url}
+                     alt={about.photo.alt || "Mazi Prima Reza"}
+                     onError={(e)=>{e.target.style.display='none'; e.target.nextSibling.style.display='grid';}} />
+              )}
+              <div className="ph" style={{ display: about.photo.url ? 'none' : 'grid' }}>your photo<br/>goes here ✏️</div>
               <span className="cap">Hi, it's me!</span>
             </div>
           </div>
           <div className="intro reveal">
             <span className="eyebrow">a little about me</span>
-            <h1>I’m a Data Scientist &amp; AI Engineer who works <em>from Jakarta, Indonesia</em>.</h1>
-            <p>
-              I’m based with an IT consulting company in Jakarta, Indonesia. Over the past few years
-              I’ve built many end-to-end projects ML prediction to Agentic AI. Widely used by various companies from various industries.
-            </p>
-            <p>
-              These days I mainly focus on building AI products that automate daily tasks, improve
-              productivity and enhance user experience. Powered by Generative AI and Machine Learning.
-              This story was started back in 2013 …{' '}
-              <button className="story-link" type="button"
-                      onClick={() => setStoryOpen(o => !o)} aria-expanded={storyOpen}>
-                {storyOpen ? 'show less' : 'read more about it →'}
-              </button>
-            </p>
+            <h1>{rich(about.heading)}</h1>
+            {about.intro.map((p, i) => (
+              <p key={i}>
+                {rich(p)}
+                {i === about.intro.length - 1 && about.story.length > 0 && (
+                  <React.Fragment>
+                    {' '}
+                    <button className="story-link" type="button"
+                            onClick={() => setStoryOpen(o => !o)} aria-expanded={storyOpen}>
+                      {storyOpen ? 'show less' : 'read more about it →'}
+                    </button>
+                  </React.Fragment>
+                )}
+              </p>
+            ))}
           </div>
         </section>
 
         {storyOpen && (
           <section className="story-body">
-            <p>
-              Starting from <strong>Tumblr.com in 2013</strong>, I was a young girl who found sparks in
-              customizing my Tumblr blog interface. Every day, after school, I would go back home, open my laptop, and dive into the world of HTML, CSS, and JavaScript. I surfed the web for Tumblr tutorials and eagerly experimented with different layouts. This daily ritual sparked my passion for web development and taught me the fundamentals of coding.
-            </p>
-            <p>
-              Back to 17, when I began planning for university, I realized my hobby could transform into a career. My heart was set on joining a Computer Science related major. However, insecurities held me back, and I decided to pursue a degree in <strong>Mathematics at ITB</strong> instead.
-            </p>
-            <p>
-              In my final year, I took a course called <strong>Deep Learning</strong> (<em>Pembelajaran
-              Mendalam</em>) that revealed how Machine Learning and Deep Learning algorithms work from a
-              mathematical perspective. I <strong>LOVE</strong> how creative the basic idea is — minimizing the gap between the predicted and actual values using optimization algorithms and repeat the process until the gap close to 0.
-            </p>
-            <p>
-              Yet, the desire to involve myself in technology never vanished, the Deep Learning class lighted the sparks again. I continued my journey and discovered a love for data science and artificial intelligence. This path has led me to become a <strong>Data Scientist and AI Engineer</strong> — fulfilling my dream of being a woman in tech. ✿
-            </p>
+            {about.story.map((p, i) => <p key={i}>{rich(p)}</p>)}
           </section>
         )}
 
@@ -128,7 +123,7 @@ function About() {
 
       <div className="tl-scroll reveal">
         <div className="tl-track">
-          {TIMELINE.map((t, i) => (
+          {timeline.map((t, i) => (
             <div className={"tl-item " + (i % 2 === 0 ? "up" : "down") + (t.highlight ? " latest" : "")} key={i}>
               <button className="tl-card" type="button" onClick={() => setOpen(i)}>
                 {t.badge && <span className="tl-badge">{t.badge}</span>}
@@ -148,32 +143,32 @@ function About() {
 
         <SecHead eyebrow="my little toolbox" title="Things I work with" />
         <section className="chips reveal">
-          {SKILLS.map(s => <span className="tag" key={s}>{s}</span>)}
+          {skills.map(s => <span className="tag" key={s}>{s}</span>)}
         </section>
 
       </div>
 
-      {open !== null && (
+      {entry && (
         <div className="tl-modal" onClick={() => setOpen(null)}>
           <div className="tl-modal-card" onClick={(e) => e.stopPropagation()}>
             <button className="tl-close" onClick={() => setOpen(null)} aria-label="Close">✕</button>
-            {TIMELINE[open].badge && <span className="tl-badge dark">{TIMELINE[open].badge}</span>}
-            <div className="m-when">{TIMELINE[open].when}</div>
-            <h3 className="m-role">{TIMELINE[open].role}</h3>
-            <div className="m-org">{TIMELINE[open].org}</div>
-            <p className="m-desc">{TIMELINE[open].desc}</p>
-            {TIMELINE[open].bullets && (
+            {entry.badge && <span className="tl-badge dark">{entry.badge}</span>}
+            <div className="m-when">{entry.when}</div>
+            <h3 className="m-role">{entry.role}</h3>
+            <div className="m-org">{entry.org}</div>
+            <p className="m-desc">{rich(entry.desc)}</p>
+            {entry.bullets.length > 0 && (
               <div className="m-bulletwrap">
-                {TIMELINE[open].bulletsLabel && (
-                  <div className="m-sublabel">{TIMELINE[open].bulletsLabel}</div>
-                )}
+                {entry.bulletsLabel && <div className="m-sublabel">{entry.bulletsLabel}</div>}
                 <ul className="m-bullets">
-                  {TIMELINE[open].bullets.map((b, k) => (
+                  {entry.bullets.map((b, k) => (
                     <li key={k}>
-                      {b.title ? <><strong>{b.title}.</strong>{b.text ? ` ${b.text}` : ''}</> : b}
-                      {b.points && (
+                      {b.title && <strong>{b.title}.</strong>}
+                      {b.title && b.text && ' '}
+                      {rich(b.text)}
+                      {b.points.length > 0 && (
                         <ul className="m-bullets">
-                          {b.points.map((pt, j) => <li key={j}>{pt}</li>)}
+                          {b.points.map((pt, j) => <li key={j}>{rich(pt)}</li>)}
                         </ul>
                       )}
                     </li>
@@ -181,29 +176,28 @@ function About() {
                 </ul>
               </div>
             )}
-            {TIMELINE[open].tools && (
+            {entry.tools.length > 0 && (
               <div className="m-tools">
                 <div className="m-sublabel">Tools I reach for ✦</div>
                 <ul className="m-bullets">
-                  {TIMELINE[open].tools.map((t, k) => <li key={k}>{t}</li>)}
+                  {entry.tools.map((t, k) => <li key={k}>{t}</li>)}
                 </ul>
               </div>
             )}
-            {TIMELINE[open].details && (
+            {entry.details.length > 0 && (
               <div className="m-sublist">
-                <div className="m-sublabel">What I’ve mentored ✦</div>
-                {TIMELINE[open].details.map((d, k) => (
+                {entry.detailsLabel && <div className="m-sublabel">{entry.detailsLabel}</div>}
+                {entry.details.map((d, k) => (
                   <div className="m-subitem" key={k}>
                     <h4 className="m-sub-role">{d.role}</h4>
                     <div className="m-sub-org">{d.org}</div>
                     <div className="m-sub-when">{d.when}</div>
-                    <p className="m-sub-desc">{d.desc}</p>
-                    {d.points && (
+                    <p className="m-sub-desc">{rich(d.desc)}</p>
+                    {d.points.length > 0 && (
                       <ul className="m-bullets">
-                        {d.points.map((pt, j) => <li key={j}>{pt}</li>)}
+                        {d.points.map((pt, j) => <li key={j}>{rich(pt)}</li>)}
                       </ul>
                     )}
-                    {d.img && <img className="m-sub-img" src={d.img} alt={d.role} loading="lazy" />}
                   </div>
                 ))}
               </div>
@@ -217,6 +211,7 @@ function About() {
 
 /* ===================== PROJECTS ===================== */
 function Projects() {
+  const content = useSiteContent();
   const [active, setActive] = useStateP("all");
   useReveal();
   useEffectP(() => {
@@ -224,7 +219,11 @@ function Projects() {
     document.querySelectorAll('.reveal:not(.in)').forEach(e => e.classList.add('in'));
   }, [active]);
 
-  const shown = PROJECTS.filter(p => active === "all" || p.cats.includes(active));
+  if (!content) return <main className="page"></main>;
+  const projects = content.projects;
+  const filters = ["all"];
+  projects.forEach(p => p.tags.forEach(t => { if (!filters.includes(t.name)) filters.push(t.name); }));
+  const shown = projects.filter(p => active === "all" || p.tags.some(t => t.name === active));
 
   return (
     <main className="page">
@@ -236,7 +235,7 @@ function Projects() {
         </p>
 
         <div className="filters reveal">
-          {FILTERS.map(f => (
+          {filters.map(f => (
             <button key={f}
               className={"filter" + (active === f ? " active" : "")}
               onClick={() => setActive(f)}>
@@ -246,19 +245,21 @@ function Projects() {
         </div>
 
         <section className="proj-grid">
-          {shown.map((p, i) => (
-            <article className="proj-card reveal" key={p.title}>
-              <span className="clip">{p.clip}</span>
-              <img className="proj-thumb" src={p.img} alt={p.title} loading="lazy" />
+          {shown.map(p => (
+            <article className="proj-card reveal" key={p.id}>
+              {p.clip && <span className="clip">{p.clip}</span>}
+              {p.image.url
+                ? <img className="proj-thumb" src={p.image.url} alt={p.image.alt || p.title} loading="lazy" />
+                : <div className="proj-thumb"></div>}
               <div className="proj-body">
                 <div className="ptags">
-                  {p.tags.map(([t, c]) => <span className={"tag " + c} key={t}>#{t}</span>)}
+                  {p.tags.map(t => <span className={"tag " + t.color} key={t.name}>#{t.name}</span>)}
                 </div>
                 <h3>{p.title}</h3>
-                <p>{p.desc}</p>
+                <p>{rich(p.desc)}</p>
                 <div className="proj-links">
                   {p.links.map((l, j) => (
-                    <a key={j} className={l.muted ? "muted" : ""}
+                    <a key={j} className={l.href ? "" : "muted"}
                        href={l.href || "#"} target={l.href ? "_blank" : undefined} rel="noreferrer">
                       {l.label}
                     </a>
@@ -274,95 +275,6 @@ function Projects() {
             nothing here yet — more coming soon! ✨
           </p>
         )}
-      </div>
-    </main>
-  );
-}
-
-/* ===================== HOBBIES ===================== */
-function PhotoPlaceholder({ src, alt, fit }) {
-  return (
-    <div className={`hob-photo${fit === 'contain' ? ' hob-photo--contain' : ''}`}>
-      <img src={src} alt={alt}
-           loading="lazy"
-           onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'grid'; }} />
-      <div className="ph" style={{ display: 'none' }}>add photo</div>
-    </div>
-  );
-}
-
-function Hobbies() {
-  useReveal();
-  return (
-    <main className="page hobbies-page">
-      <div className="wrap">
-
-        <section className="hob-hero reveal">
-          <h1 className="hob-h1">
-            <span className="eyebrow hob-ey">life beyond working</span>
-            <span className="hob-title">Hobbies</span>
-          </h1>
-          <p className="lead">A few things I love to do, beyond the work.</p>
-        </section>
-
-        {/* 01 — Freediving */}
-        <section className="hob-section reveal">
-          <span className="hob-num">01 — blurp blurp blurp🫧</span>
-          <h2>Freediving</h2>
-          <p className="hob-text">
-            I joined an open trip to Sebesi Island in Lampung at the beginning of 2026. I had a snorkling session and thought it'd be fun to dive down and get closer to the reefs. That's how I decided to apply for AIDA2 certification. <span className="hl">My personal best: STA 2mins 7secs, DYNB 40meters, CTW 15meters</span> (basically the minimum requirements for AIDA2 is my PB LOL).
-            Just earned my <span className="hl">AIDA 2</span> this June. (the reason this page is created, i want the whole world to know that im a certified freediver :p)
-          </p>
-          <div className="hob-gallery">
-            {FREEDIVE_PHOTOS.map((f, i) => (
-              <PhotoPlaceholder key={f} src={`assets/images/${f}`}
-                                 alt={f.includes('cert') ? 'AIDA 2 certification' : `Freediving photo ${i + 1}`}
-                                 fit={f.includes('cert') ? 'contain' : undefined} />
-            ))}
-          </div>
-          <p className="hob-scroll-hint">scroll →</p>
-        </section>
-
-        {/* 02 — Books */}
-        <section className="hob-section reveal">
-          <span className="hob-num">02 — Reading!</span>
-          <h2>Books</h2>
-          <p className="hob-text">
-            What I've been reading lately, from my{' '}
-            <a className="hob-link" href={GOODREADS_URL} target="_blank" rel="noreferrer">Goodreads</a>.
-          </p>
-          <iframe className="gr-widget-frame" title="Goodreads — read shelf"
-                  srcDoc={GR_WIDGET_HTML} loading="lazy" />
-          <a className="gr-badge" href={GOODREADS_URL} target="_blank" rel="noreferrer">goodreads</a> <span> - </span>
-          <a className="gr-badge" href={STORY_GRAPH_URL} target="_blank" rel="noreferrer">storygraph</a>
-        </section>
-
-        {/* 03 — Strava */}
-        <section className="hob-section reveal">
-          <span className="hob-num">03 — I'm on my late 20s, my body needs workout.</span>
-          <h2>Workout!</h2>
-          <p className="hob-text">
-            In 2023, I never believed I'd be diagnosed as obese, since my body weighed only 40kg at the time. Yet I never knew my body fat was 35%. In 2025, I hit the gym and felt much better since then. I love the gym more than anything — oh, and I also run and swim for fun. — all log to{' '}
-            <a className="hob-link" href={STRAVA_URL} target="_blank" rel="noreferrer">Strava</a>.
-          </p>
-          <a className="gr-badge" href={STRAVA_URL} target="_blank" rel="noreferrer">View my Strava →</a>
-        </section>
-
-        {/* 04 — Swiftie */}
-        <section className="hob-section reveal">
-          <span className="hob-num">04 — Forever in my Eras era</span>
-          <h2>Swiftie</h2>
-          <p className="hob-text">
-            Taylor Swift has been with me since I was 11. She has to be mentioned if i want to tell the story of my life. From singing her songs alone in my bedroom to singing along with her in the <span className="hl">Eras Tour Singapore row 6 seat 19 on a random Thursday, March 7th 2024.</span>
-          </p>
-          <div className="hob-gallery">
-            {CONCERT_PHOTOS.map((f, i) => (
-              <PhotoPlaceholder key={f} src={`assets/images/${f}`} alt={`Concert photo ${i + 1}`} />
-            ))}
-          </div>
-          <p className="hob-scroll-hint">scroll →</p>
-        </section>
-
       </div>
     </main>
   );
@@ -398,4 +310,4 @@ function Contact() {
   );
 }
 
-Object.assign(window, { Home, About, Projects, Hobbies, Contact });
+Object.assign(window, { Home, About, Projects, Contact });

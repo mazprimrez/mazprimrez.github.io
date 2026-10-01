@@ -25,13 +25,33 @@ const ROUTES = {
   '#/':         Home,
   '#/about':    About,
   '#/projects': Projects,
-  '#/hobbies':  Hobbies,
   '#/contact':  Contact,
 };
 
+const PAGE_TITLES = {
+  '#/':         'Mazi Prima Reza · AI Engineer & Data Scientist',
+  '#/about':    'About · Mazi Prima Reza',
+  '#/projects': 'Projects · Mazi Prima Reza',
+  '#/contact':  'Contact · Mazi Prima Reza',
+};
+
+// GA4 drops the #fragment from page paths, so report each route as a real path (/about, /projects…).
+function useAnalytics(route) {
+  useEffectApp(() => {
+    document.title = PAGE_TITLES[route];
+    if (typeof window.gtag !== 'function') return;
+    gtag('event', 'page_view', {
+      page_title: document.title,
+      page_location: location.origin + location.pathname.replace(/\/$/, '') + route.slice(1),
+    });
+  }, [route]);
+}
+
 function App() {
-  const route = useHashRoute();
-  const Page = ROUTES[route] || Home;
+  const hash = useHashRoute();
+  const route = ROUTES[hash] ? hash : '#/';
+  const Page = ROUTES[route];
+  useAnalytics(route);
   return (
     <React.Fragment>
       <Nav route={route} />
@@ -41,4 +61,5 @@ function App() {
   );
 }
 
+loadSiteContent();
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);

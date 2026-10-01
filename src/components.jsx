@@ -12,35 +12,131 @@ const NAV = [
   { path: '#/contact',  label: 'Contact' },
 ];
 
-const GOODREADS_URL = "https://www.goodreads.com/review/list/68761275-mazi-reza?shelf=read";
-const STRAVA_URL = "https://www.strava.com/athletes/143377025";
-const STORY_GRAPH_URL = "https://app.thestorygraph.com/profile/sparklingdust"
+/* ---------- Site content (managed from admin.html, stored in Firestore website/content) ---------- */
+// Not a secret: Firebase web config is public by design; the security rules guard writes.
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyASXI9wL7__7f3eWM2FKm7UhLUE1Elk89Y",
+  authDomain: "mazprimrez-b9171.firebaseapp.com",
+  projectId: "mazprimrez-b9171",
+  storageBucket: "mazprimrez-b9171.firebasestorage.app",
+  messagingSenderId: "1069639485834",
+  appId: "1:1069639485834:web:e77db2bfd73fe281352073",
+};
+const IMG_BASE = `https://storage.googleapis.com/${FIREBASE_CONFIG.storageBucket}/website/`;
+const siteImg = (file, alt) => ({ url: IMG_BASE + file, path: "website/" + file, alt: alt || "" });
 
-// Official Goodreads "grid widget" embed for the read shelf — rendered inside
-// an iframe (srcdoc) because the widget script uses document.write, which
-// would otherwise blow away our SPA's DOM if inserted directly into the page.
-const GR_WIDGET_HTML = `      <style type="text/css" media="screen">
-        .gr_grid_container {
-          /* customize grid container div here. eg: width: 700px; */
-        }
+const TAG_COLORS = ["", "honey", "lilac", "blue", "sage"];
 
-        .gr_grid_book_container {
-          /* customize book cover container div here */
-          float: left;
-          width: 98px;
-          height: 160px;
-          padding: 0px 0px;
-          overflow: hidden;
-        }
-      </style>
-      <div id="gr_grid_widget_1782751168">
-      <script src="https://www.goodreads.com/review/grid_widget/68761275.Mazi's%20bookshelf:%20read?cover_size=medium&hide_link=&hide_title=&num_books=19&order=d&shelf=read&sort=date_read&widget_id=1782751168" type="text/javascript" charset="utf-8"></script>
-`;
+// Firestore rejects undefined values and nested arrays, so everything is
+// coerced into this exact shape both when the site reads and when admin saves.
+const str = v => (typeof v === "string" ? v : "");
+const strList = v => (Array.isArray(v) ? v.filter(x => typeof x === "string" && x.trim()) : []);
+const normImage = v => ({ url: str(v && v.url), path: str(v && v.path), alt: str(v && v.alt) });
+const normBullet = b => (typeof b === "string"
+  ? { title: "", text: b, points: [] }
+  : { title: str(b.title), text: str(b.text), points: strList(b.points) });
+const normEntry = t => ({
+  when: str(t.when), role: str(t.role), org: str(t.org), desc: str(t.desc),
+  badge: str(t.badge), highlight: !!t.highlight,
+  bulletsLabel: str(t.bulletsLabel), bullets: (t.bullets || []).map(normBullet),
+  tools: strList(t.tools),
+  detailsLabel: str(t.detailsLabel),
+  details: (t.details || []).map(d => ({
+    role: str(d.role), org: str(d.org), when: str(d.when), desc: str(d.desc), points: strList(d.points),
+  })),
+});
+const normProject = (p, i) => ({
+  id: str(p.id) || "project-" + i,
+  title: str(p.title), desc: str(p.desc), image: normImage(p.image),
+  tags: (p.tags || []).map(t => Array.isArray(t)
+    ? { name: str(t[0]), color: str(t[1]) }
+    : { name: str(t.name), color: str(t.color) }).filter(t => t.name.trim()),
+  links: (p.links || []).map(l => ({ label: str(l.label), href: str(l.href) })).filter(l => l.label.trim()),
+  clip: str(p.clip),
+});
 
-const FREEDIVE_PHOTOS = ["freediving-cert.png", "freediving-2.jpg", "freediving-3.jpg"];
-const CONCERT_PHOTOS = ["concert-1.jpg", "concert-2.jpg", "concert-3.jpg"];
+// Sections missing from `raw` come from `fallback`.
+function normalizeContent(raw, fallback) {
+  const d = raw || {};
+  const f = fallback || {};
+  const about = d.about || f.about || {};
+  return {
+    about: {
+      photo: normImage(about.photo), heading: str(about.heading),
+      intro: strList(about.intro), story: strList(about.story),
+    },
+    skills: strList(d.skills || f.skills),
+    timeline: (d.timeline || f.timeline || []).map(normEntry),
+    projects: (d.projects || f.projects || []).map(normProject),
+  };
+}
 
-const TIMELINE = [
+// **bold** and *italic* inside admin-edited text.
+function rich(text) {
+  return String(text || "").split(/(\*\*[^*]+\*\*|\*[^*\n]+\*)/g).map((part, i) => {
+    if (part.length > 4 && part.startsWith("**") && part.endsWith("**")) return <strong key={i}>{part.slice(2, -2)}</strong>;
+    if (part.length > 2 && part.startsWith("*") && part.endsWith("*")) return <em key={i}>{part.slice(1, -1)}</em>;
+    return part;
+  });
+}
+
+// Firestore REST returns typed values ({ stringValue: "…" }); unwrap them to plain JSON.
+function fromFirestore(v) {
+  if ("mapValue" in v) {
+    const out = {};
+    Object.entries(v.mapValue.fields || {}).forEach(([k, x]) => { out[k] = fromFirestore(x); });
+    return out;
+  }
+  if ("arrayValue" in v) return (v.arrayValue.values || []).map(fromFirestore);
+  if ("integerValue" in v) return Number(v.integerValue);
+  if ("nullValue" in v) return null;
+  return Object.values(v)[0];
+}
+
+let siteContentCache = null;
+let siteContentPromise = null;
+function loadSiteContent() {
+  if (!siteContentPromise) {
+    const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/website/content`;
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 6000);
+    siteContentPromise = fetch(url, { signal: ctrl.signal })
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(doc => normalizeContent(fromFirestore({ mapValue: doc }), DEFAULT_CONTENT))
+      .catch(() => DEFAULT_CONTENT)
+      .then(content => { clearTimeout(timer); return (siteContentCache = content); });
+  }
+  return siteContentPromise;
+}
+
+// null while loading, so pages don't flash the built-in defaults before the saved content.
+function useSiteContent() {
+  const [content, setContent] = useState(siteContentCache);
+  useEffect(() => {
+    let live = true;
+    loadSiteContent().then(c => { if (live) setContent(c); });
+    return () => { live = false; };
+  }, []);
+  return content;
+}
+
+/* ---------- Built-in defaults (used until website/content is saved, or if it can't load) ---------- */
+const DEFAULT_ABOUT = {
+  photo: siteImg("me.jpg", "Mazi Prima Reza"),
+  heading: "I’m a Data Scientist & AI Engineer who works *from Jakarta, Indonesia*.",
+  intro: [
+    "I’m based with an IT consulting company in Jakarta, Indonesia. Over the past few years I’ve built many end-to-end projects ML prediction to Agentic AI. Widely used by various companies from various industries.",
+    "These days I mainly focus on building AI products that automate daily tasks, improve productivity and enhance user experience. Powered by Generative AI and Machine Learning. This story was started back in 2013 …",
+  ],
+  story: [
+    "Starting from **Tumblr.com in 2013**, I was a young girl who found sparks in customizing my Tumblr blog interface. Every day, after school, I would go back home, open my laptop, and dive into the world of HTML, CSS, and JavaScript. I surfed the web for Tumblr tutorials and eagerly experimented with different layouts. This daily ritual sparked my passion for web development and taught me the fundamentals of coding.",
+    "Back to 17, when I began planning for university, I realized my hobby could transform into a career. My heart was set on joining a Computer Science related major. However, insecurities held me back, and I decided to pursue a degree in **Mathematics at ITB** instead.",
+    "In my final year, I took a course called **Deep Learning** (*Pembelajaran Mendalam*) that revealed how Machine Learning and Deep Learning algorithms work from a mathematical perspective. I **LOVE** how creative the basic idea is — minimizing the gap between the predicted and actual values using optimization algorithms and repeat the process until the gap close to 0.",
+    "Yet, the desire to involve myself in technology never vanished, the Deep Learning class lighted the sparks again. I continued my journey and discovered a love for data science and artificial intelligence. This path has led me to become a **Data Scientist and AI Engineer** — fulfilling my dream of being a woman in tech. ✿",
+  ],
+};
+
+const DEFAULT_TIMELINE = [
   { when: "Aug ’16 — Oct ’20", role: "B.Sc. Mathematics", org: "Institut Teknologi Bandung",
     desc: "Mathematics major — the foundation behind every model I build.",
     bulletsLabel: "Highlights ✦",
@@ -64,6 +160,7 @@ const TIMELINE = [
   { when: "Jan ’22 — Present", role: "Teacher & Mentor", org: "Various Programs",
     desc: "Teaching and mentoring aspiring data scientists across several programs — something I still do today.",
     highlight: true, badge: "★ Still going",
+    detailsLabel: "What I’ve mentored ✦",
     details: [
       { role: "Data Science & AI Mentor · Curriculum Developer", org: "Hacktiv8", when: "Mar 2025 — Present",
         desc: "Hacktiv8 is a famous educational technology platform that transforms complete beginners into an IT professional. Mentoring and building curriculum across Hacktiv8's Data Science and AI programs:",
@@ -126,55 +223,62 @@ const TIMELINE = [
     ] },
 ];
 
-const SKILLS = [
+const DEFAULT_SKILLS = [
   "Python", "Generative AI", "LLMs / RAG", "Machine Learning", "Recommendation Systems",
   "Time Series", "NLP", "BERTopic", "XGBoost", "Prophet", "Tableau", "SQL",
 ];
 
-const PROJECTS = [
+const DEFAULT_PROJECTS = [
   {
+    id: "eras-outfit",
+    image: siteImg("eras-tour-outfit.jpg"),
     title: "Beating My Own Self in Guessing Taylor Swift Eras Tour Outfit",
     desc: "Using time series for categorical data to win the Eras Tour Mastermind game — one of my favorite tour rituals turned into a modeling experiment.",
-    img: "assets/images/eras-tour-outfit.jpg",
-    cats: ["time-series"], tags: [["time-series","honey"]],
+    tags: [["time-series","honey"]],
     links: [{ label: "Medium", href: "https://medium.com/@sparklingdust/beating-my-own-self-on-swift-alert-mastermind-game-in-guessing-taylor-swift-eras-tour-outfit-52b6535e0d8f" }, { label: "GitHub (soon)", muted: true }],
     clip: "📌",
   },
   {
+    id: "instagram-topics",
+    image: siteImg("text-segmentation.png"),
     title: "Topic Extraction · Instagram App Reviews, July 2023",
     desc: "End-to-end project extracting topics from Instagram reviews so teams get a clear overview of their issues — a semi-supervised approach with BERTopic and XGBoost.",
-    img: "assets/images/text-segmentation.png",
-    cats: ["classification","nlp"], tags: [["nlp","lilac"],["classification","blue"]],
+    tags: [["nlp","lilac"],["classification","blue"]],
     links: [{ label: "Tableau", href: "https://public.tableau.com/app/profile/mazi.prima.reza/viz/InstagramAppReviewsinJuly2023/InstagramAppReviewsDashbaord" }, { label: "Deck", href: "https://docs.google.com/presentation/d/14WpJBWfw3LVZ0KR71z8a_MGAAvkj14owe7L0-RZ9g10/edit?usp=sharing" }, { label: "GitHub (soon)", muted: true }],
     clip: "🔖",
   },
   {
+    id: "prophet-forecast",
+    image: siteImg("prophet.png"),
     title: "Ecommerce Sales Forecast using Prophet",
     desc: "Accurate sales prediction for the supply chain — aligning stock with anticipated demand to reduce stockouts and excess inventory.",
-    img: "assets/images/prophet.png",
-    cats: ["time-series"], tags: [["time-series","honey"]],
+    tags: [["time-series","honey"]],
     links: [{ label: "Kaggle", href: "https://www.kaggle.com/code/maziprimareza/ecommerce-sales-forecast-using-prophet" }, { label: "Deck", href: "https://docs.google.com/presentation/d/14KyGeSOj47n4IV8Rlz7MTYMQG3Dqpc-AnM5rN0GRlEc/edit?usp=sharing" }],
     clip: "📎",
   },
   {
+    id: "zeeflix",
+    image: siteImg("zeeflix.jpg"),
     title: "Zeeflix — Multistage Recommendation System",
     desc: "A multi-stage recommendation web-app: candidate retrieval followed by a learning-to-rank stage to generate better recommendations for users.",
-    img: "assets/images/zeeflix.png",
-    cats: ["rec-sys"], tags: [["rec-sys","sage"]],
+    tags: [["rec-sys","sage"]],
     links: [{ label: "Web app", href: "https://zeeflix-5e68.onrender.com/" }, { label: "GitHub", href: "https://github.com/mazprimrez/zeeflix" }],
     clip: "📌",
   },
   {
+    id: "la-restaurants",
+    image: siteImg("dashboard.png"),
     title: "Los Angeles Restaurants Information Dashboard",
     desc: "Ratings, popularity, reviews and location for restaurants across Los Angeles — scraped from Yelp and visualized in Tableau.",
-    img: "assets/images/dashboard.png",
-    cats: ["dashboard"], tags: [["dashboard","blue"]],
+    tags: [["dashboard","blue"]],
     links: [{ label: "Tableau", href: "https://public.tableau.com/app/profile/mazi.prima.reza/viz/Book2_16338472311500/Dashboard1" }],
     clip: "🔖",
   },
 ];
 
-const FILTERS = ["all", "classification", "rec-sys", "time-series", "nlp", "dashboard"];
+const DEFAULT_CONTENT = normalizeContent({
+  about: DEFAULT_ABOUT, skills: DEFAULT_SKILLS, timeline: DEFAULT_TIMELINE, projects: DEFAULT_PROJECTS,
+});
 
 const CONTACTS = [
   { ic: "💼", lbl: "LinkedIn", val: "in/maziprimareza", href: "https://www.linkedin.com/in/maziprimareza/" },
@@ -276,6 +380,6 @@ const Doodles = {
   ),
 };
 
-Object.assign(window, { useReveal, Nav, Footer, SecHead, Doodles,
-  NAV, TIMELINE, SKILLS, PROJECTS, FILTERS, CONTACTS,
-  GOODREADS_URL, STRAVA_URL, GR_WIDGET_HTML, FREEDIVE_PHOTOS, CONCERT_PHOTOS });
+Object.assign(window, { useReveal, Nav, Footer, SecHead, Doodles, NAV, CONTACTS,
+  FIREBASE_CONFIG, IMG_BASE, TAG_COLORS, DEFAULT_CONTENT, normalizeContent, rich,
+  loadSiteContent, useSiteContent });
