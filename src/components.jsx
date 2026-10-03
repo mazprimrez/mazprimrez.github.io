@@ -327,7 +327,10 @@ function Nav({ route }) {
         <ul className="nav-links">
           {NAV.map(n => (
             <li key={n.path}>
-              <a href={n.path} className={route === n.path ? "active" : ""}>{n.label}</a>
+              {/* Links to other sites (e.g. the hobbies blog) open in a new tab. */}
+              {n.path.startsWith("http")
+                ? <a href={n.path} target="_blank" rel="noreferrer">{n.label}</a>
+                : <a href={n.path} className={route === n.path ? "active" : ""}>{n.label}</a>}
             </li>
           ))}
         </ul>
