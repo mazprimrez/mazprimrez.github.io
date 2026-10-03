@@ -25,6 +25,22 @@ const FIREBASE_CONFIG = {
 const IMG_BASE = `https://storage.googleapis.com/${FIREBASE_CONFIG.storageBucket}/website/`;
 const siteImg = (file, alt) => ({ url: IMG_BASE + file, path: "website/" + file, alt: alt || "" });
 
+// Pages load images through the Cloudflare cache (workers/img-cache.js) rather than the US bucket.
+const IMG_CDN = "https://img.mazprimrez.com/";
+const imgSrc = image => /^website\/[^/]+$/.test(image.path)
+  ? IMG_CDN + "website/" + encodeURIComponent(image.path.slice(8))
+  : image.url;
+
+// Falls back to the stored Firebase URL if the cache can't serve the image.
+// (No `...rest` destructuring: Babel turns it into a global `_excluded`, which admin.jsx also declares.)
+function SiteImg(props) {
+  const { image, onError } = props;
+  const [direct, setDirect] = useState(false);
+  const cached = imgSrc(image);
+  return <img {...props} image={undefined} src={direct ? image.url : cached}
+    onError={e => (!direct && cached !== image.url ? setDirect(true) : onError && onError(e))} />;
+}
+
 const TAG_COLORS = ["", "honey", "lilac", "blue", "sage"];
 
 // Firestore rejects undefined values and nested arrays, so everything is
@@ -98,10 +114,12 @@ let siteContentPromise = null;
 function loadSiteContent() {
   if (!siteContentPromise) {
     const url = `https://firestore.googleapis.com/v1/projects/${FIREBASE_CONFIG.projectId}/databases/(default)/documents/website/content`;
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), 6000);
-    siteContentPromise = fetch(url, { signal: ctrl.signal })
-      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    // index.html starts this request before React and Babel load, so images can start sooner.
+    const request = window.siteContentRequest
+      || fetch(url).then(r => r.ok ? r.json() : Promise.reject(r.status));
+    let timer;
+    const timeout = new Promise((_, reject) => { timer = setTimeout(reject, 6000); });
+    siteContentPromise = Promise.race([request, timeout])
       .then(doc => normalizeContent(fromFirestore({ mapValue: doc }), DEFAULT_CONTENT))
       .catch(() => DEFAULT_CONTENT)
       .then(content => { clearTimeout(timer); return (siteContentCache = content); });
@@ -382,4 +400,4 @@ const Doodles = {
 
 Object.assign(window, { useReveal, Nav, Footer, SecHead, Doodles, NAV, CONTACTS,
   FIREBASE_CONFIG, IMG_BASE, TAG_COLORS, DEFAULT_CONTENT, normalizeContent, rich,
-  loadSiteContent, useSiteContent });
+  loadSiteContent, useSiteContent, SiteImg });

@@ -83,8 +83,9 @@ function About() {
             <div className="polaroid" style={{ transform: 'rotate(-3deg)' }}>
               <span className="tape t1"></span>
               {about.photo.url && (
-                <img src={about.photo.url}
+                <SiteImg image={about.photo}
                      alt={about.photo.alt || "Mazi Prima Reza"}
+                     fetchpriority="high"
                      onError={(e)=>{e.target.style.display='none'; e.target.nextSibling.style.display='grid';}} />
               )}
               <div className="ph" style={{ display: about.photo.url ? 'none' : 'grid' }}>your photo<br/>goes here ✏️</div>
@@ -249,7 +250,7 @@ function Projects() {
             <article className="proj-card reveal" key={p.id}>
               {p.clip && <span className="clip">{p.clip}</span>}
               {p.image.url
-                ? <img className="proj-thumb" src={p.image.url} alt={p.image.alt || p.title} loading="lazy" />
+                ? <SiteImg className="proj-thumb" image={p.image} alt={p.image.alt || p.title} loading="lazy" />
                 : <div className="proj-thumb"></div>}
               <div className="proj-body">
                 <div className="ptags">
