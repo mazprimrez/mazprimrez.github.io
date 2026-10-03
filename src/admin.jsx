@@ -94,12 +94,14 @@ function listOps(items, onChange) {
     },
     remove: i => onChange(items.filter((_, j) => j !== i)),
     add: item => onChange(items.concat([item])),
+    addFirst: item => onChange([item].concat(items)),
   };
 }
 
 function pathsInUse(c) {
   if (!c) return [];
-  return [c.about.photo, ...c.projects.map(p => p.image)].map(i => i && i.path).filter(Boolean);
+  const timelinePhotos = c.timeline.flatMap(t => t.photos.concat(...t.details.map(d => d.photos)));
+  return [c.about.photo, ...c.projects.map(p => p.image), ...timelinePhotos].map(i => i && i.path).filter(Boolean);
 }
 
 function errorText(e) {
@@ -111,10 +113,10 @@ function errorText(e) {
 
 const NEW_ENTRY = {
   when: "", role: "New role", org: "", desc: "", badge: "", highlight: false,
-  bulletsLabel: "Notable projects ✦", bullets: [], tools: [], detailsLabel: "", details: [],
+  bulletsLabel: "Notable projects ✦", bullets: [], tools: [], detailsLabel: "", details: [], photos: [],
 };
 const NEW_BULLET = { title: "", text: "", points: [] };
-const NEW_DETAIL = { role: "", org: "", when: "", desc: "", points: [] };
+const NEW_DETAIL = { role: "", org: "", when: "", desc: "", points: [], photos: [] };
 const RICH_HINT = "Use **bold** and *italic*.";
 
 /* ---------- Form building blocks ---------- */
@@ -149,13 +151,13 @@ function ParagraphsField({ label, value, onChange, rows }) {
   );
 }
 
-function ItemControls({ index, count, onMove, onRemove, removeLabel }) {
+function ItemControls({ index, count, onMove, onRemove, removeLabel, horizontal }) {
   return (
     <div className="adm-controls">
       <button type="button" className="adm-icon" disabled={index === 0}
-              onClick={() => onMove(index, -1)} aria-label="Move up">↑</button>
+              onClick={() => onMove(index, -1)} aria-label={horizontal ? "Move left" : "Move up"}>{horizontal ? "←" : "↑"}</button>
       <button type="button" className="adm-icon" disabled={index === count - 1}
-              onClick={() => onMove(index, 1)} aria-label="Move down">↓</button>
+              onClick={() => onMove(index, 1)} aria-label={horizontal ? "Move right" : "Move down"}>{horizontal ? "→" : "↓"}</button>
       <button type="button" className="adm-link danger"
               onClick={() => { if (confirm(`Remove this ${removeLabel}?`)) onRemove(index); }}>Remove</button>
     </div>
@@ -207,6 +209,30 @@ function ImageSlot({ image, ratio, busy, onFiles, onRemove }) {
         <PickButton label={image.url ? "Replace" : "Upload"} disabled={busy} onFiles={onFiles} className="sm" />
         {onRemove && image.url && <button type="button" className="adm-link danger" onClick={onRemove}>Remove</button>}
       </div>
+    </div>
+  );
+}
+
+// Photo strip (scrolls sideways) for a timeline entry or sub-entry; the popup shows them the same way.
+function PhotosEditor({ photos, busy, onUpload, onChange }) {
+  const ops = listOps(photos, onChange);
+  return (
+    <div className="adm-group">
+      <span className="adm-label">Photos</span>
+      {photos.length > 0 && (
+        <div className="adm-strip">
+          {photos.map((p, i) => (
+            <figure className="adm-strip-item" key={p.path || p.url}>
+              <img src={p.url} alt="" loading="lazy" />
+              <input className="adm-input" value={p.alt} placeholder="Alt text"
+                     onChange={e => ops.update(i, { alt: e.target.value })} />
+              <ItemControls index={i} count={photos.length} onMove={ops.move} onRemove={ops.remove}
+                            removeLabel="photo" horizontal />
+            </figure>
+          ))}
+        </div>
+      )}
+      <PickButton label="+ Add photos" multiple disabled={busy} onFiles={onUpload} className="sm" />
     </div>
   );
 }
@@ -272,10 +298,11 @@ function BulletsEditor({ items, onChange }) {
   );
 }
 
-function DetailsEditor({ items, onChange }) {
+function DetailsEditor({ items, onChange, busy, onUpload }) {
   const ops = listOps(items, onChange);
   return (
     <div className="adm-group">
+      <button type="button" className="adm-btn sm" onClick={() => ops.addFirst(NEW_DETAIL)}>+ Add sub-entry</button>
       {items.map((d, i) => (
         <div className="adm-sub" key={i}>
           <div className="adm-grid3">
@@ -286,17 +313,27 @@ function DetailsEditor({ items, onChange }) {
           <Field label="Description" multiline value={d.desc} hint={RICH_HINT} onChange={v => ops.update(i, { desc: v })} />
           <LinesField label="Points" hint="Optional. One per line." rows={2} value={d.points}
                       onChange={v => ops.update(i, { points: v })} />
+          <PhotosEditor photos={d.photos} busy={busy} onUpload={onUpload(i)}
+                        onChange={v => ops.update(i, { photos: v })} />
           <ItemControls index={i} count={items.length} onMove={ops.move} onRemove={ops.remove} removeLabel="sub-entry" />
         </div>
       ))}
-      <button type="button" className="adm-btn sm" onClick={() => ops.add(NEW_DETAIL)}>+ Add sub-entry</button>
     </div>
   );
 }
 
-function ExperienceTab({ timeline, setTimeline }) {
+function ExperienceTab({ timeline, setTimeline, busy, upload }) {
   const [openIdx, setOpenIdx] = useStateA(null);
   const ops = listOps(timeline, setTimeline);
+  // Appends uploads to entry i (or its sub-entry di) via an updater, since the upload is async.
+  const addPhotos = (i, di) => async files => {
+    const imgs = await upload(files);
+    if (!imgs.length) return;
+    const add = x => patch(x, { photos: x.photos.concat(imgs) });
+    setTimeline(tl => tl.map((t, j) => j !== i ? t
+      : di === undefined ? add(t)
+      : patch(t, { details: t.details.map((d, k) => k === di ? add(d) : d) })));
+  };
   const move = (i, d) => { ops.move(i, d); if (openIdx === i) setOpenIdx(i + d); else if (openIdx === i + d) setOpenIdx(i); };
   const remove = i => { ops.remove(i); setOpenIdx(null); };
   return (
@@ -304,7 +341,7 @@ function ExperienceTab({ timeline, setTimeline }) {
       <header className="adm-card-head">
         <div>
           <h2>Experience timeline</h2>
-          <p className="adm-hint">Top of this list = left end of the timeline (oldest). The page opens scrolled to the last entry.</p>
+          <p className="adm-hint">The About page sorts these by the dates in “When”, latest first, so the order here doesn’t matter.</p>
         </div>
         <button type="button" className="adm-btn primary"
                 onClick={() => { ops.add(NEW_ENTRY); setOpenIdx(timeline.length); }}>+ Add entry</button>
@@ -319,8 +356,10 @@ function ExperienceTab({ timeline, setTimeline }) {
               <Field label="Organisation" value={t.org} onChange={v => ops.update(i, { org: v })} />
               <Field label="When" value={t.when} placeholder="May ’25 — Present" onChange={v => ops.update(i, { when: v })} />
             </div>
-            <Field label="Summary (on the card and at the top of the popup)" multiline value={t.desc}
+            <Field label="Summary (at the top of the popup)" multiline value={t.desc}
                    onChange={v => ops.update(i, { desc: v })} />
+            <PhotosEditor photos={t.photos} busy={busy} onUpload={addPhotos(i)}
+                          onChange={v => ops.update(i, { photos: v })} />
             <div className="adm-grid3">
               <Field label="Badge" value={t.badge} placeholder="★ Latest" onChange={v => ops.update(i, { badge: v })} />
               <label className="adm-check adm-check-field">
@@ -341,7 +380,8 @@ function ExperienceTab({ timeline, setTimeline }) {
             <p className="adm-hint">For roles with several engagements, like mentoring programmes.</p>
             <Field label="Heading" value={t.detailsLabel} placeholder="What I’ve mentored ✦"
                    onChange={v => ops.update(i, { detailsLabel: v })} />
-            <DetailsEditor items={t.details} onChange={v => ops.update(i, { details: v })} />
+            <DetailsEditor items={t.details} onChange={v => ops.update(i, { details: v })}
+                           busy={busy} onUpload={di => addPhotos(i, di)} />
 
             <ItemControls index={i} count={timeline.length} onMove={move} onRemove={remove} removeLabel="timeline entry" />
           </Expandable>
@@ -630,7 +670,7 @@ function Editor() {
       </nav>
 
       {tab === "about" && <AboutTab about={draft.about} setAbout={section("about")} busy={busy} upload={upload} />}
-      {tab === "experience" && <ExperienceTab timeline={draft.timeline} setTimeline={section("timeline")} />}
+      {tab === "experience" && <ExperienceTab timeline={draft.timeline} setTimeline={section("timeline")} busy={busy} upload={upload} />}
       {tab === "skills" && <SkillsTab skills={draft.skills} setSkills={section("skills")} />}
       {tab === "projects" && <ProjectsTab projects={draft.projects} setProjects={section("projects")} busy={busy} upload={upload} />}
       {tab === "library" && <Library inUse={pathsInUse(saved).concat(pathsInUse(draft))} version={libVersion}

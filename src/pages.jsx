@@ -90,6 +90,16 @@ function journeyChart(timeline) {
   return { bars, span };
 }
 
+// Photos in the timeline popup: a sideways-scrolling strip.
+function PhotoStrip({ photos }) {
+  if (!photos.length) return null;
+  return (
+    <div className="m-photos">
+      {photos.map((p, i) => <SiteImg key={p.path || i} image={p} alt={p.alt} loading="lazy" />)}
+    </div>
+  );
+}
+
 function About() {
   const content = useSiteContent();
   const [open, setOpen] = useStateP(null);
@@ -199,6 +209,7 @@ function About() {
             <h3 className="m-role">{entry.role}</h3>
             <div className="m-org">{entry.org}</div>
             <p className="m-desc">{rich(entry.desc)}</p>
+            <PhotoStrip photos={entry.photos} />
             {entry.bullets.length > 0 && (
               <div className="m-bulletwrap">
                 {entry.bulletsLabel && <div className="m-sublabel">{entry.bulletsLabel}</div>}
@@ -240,6 +251,7 @@ function About() {
                         {d.points.map((pt, j) => <li key={j}>{rich(pt)}</li>)}
                       </ul>
                     )}
+                    <PhotoStrip photos={d.photos} />
                   </div>
                 ))}
               </div>

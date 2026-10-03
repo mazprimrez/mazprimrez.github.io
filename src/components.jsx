@@ -48,6 +48,7 @@ const TAG_COLORS = ["", "honey", "lilac", "blue", "sage"];
 const str = v => (typeof v === "string" ? v : "");
 const strList = v => (Array.isArray(v) ? v.filter(x => typeof x === "string" && x.trim()) : []);
 const normImage = v => ({ url: str(v && v.url), path: str(v && v.path), alt: str(v && v.alt) });
+const normPhotos = v => (Array.isArray(v) ? v.map(normImage).filter(p => p.url) : []);
 const normBullet = b => (typeof b === "string"
   ? { title: "", text: b, points: [] }
   : { title: str(b.title), text: str(b.text), points: strList(b.points) });
@@ -59,7 +60,9 @@ const normEntry = t => ({
   detailsLabel: str(t.detailsLabel),
   details: (t.details || []).map(d => ({
     role: str(d.role), org: str(d.org), when: str(d.when), desc: str(d.desc), points: strList(d.points),
+    photos: normPhotos(d.photos),
   })),
+  photos: normPhotos(t.photos),
 });
 const normProject = (p, i) => ({
   id: str(p.id) || "project-" + i,

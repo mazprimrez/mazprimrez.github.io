@@ -258,6 +258,18 @@
 .m-sub-org { font-weight: 800; color: var(--ink); font-size: .92rem; margin-top: 3px; }
 .m-sub-when { font-family: var(--hand); font-size: 1.2rem; color: var(--rose-500); margin: 1px 0 5px; }
 .m-sub-desc { color: var(--ink-soft); font-size: .92rem; line-height: 1.55; margin: 0; }
+/* popup photos: a strip that scrolls sideways */
+.m-photos {
+  display: flex; gap: 12px; overflow-x: auto; margin-top: 14px; padding-bottom: 8px;
+  scroll-snap-type: x proximity; -webkit-overflow-scrolling: touch;
+}
+.m-photos img {
+  flex: none; height: 190px; width: auto; max-width: none;
+  border-radius: 10px; background: var(--pink-100); scroll-snap-align: start;
+}
+.m-subitem .m-photos img { height: 150px; }
+.m-photos::-webkit-scrollbar { height: 8px; }
+.m-photos::-webkit-scrollbar-thumb { background: var(--pink-200); border-radius: 999px; }
 .m-sub-img { margin-top: 11px; border-radius: 9px; border: 1px solid var(--pink-150); box-shadow: var(--shadow-soft); }
 
 /* skills */
