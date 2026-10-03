@@ -8,7 +8,7 @@ const NAV = [
   { path: '#/',         label: 'Home' },
   { path: '#/about',    label: 'About' },
   { path: '#/projects', label: 'Projects' },
-  { path: '#/hobbies',  label: 'Beyond Working' },
+  { path: 'https://blog.mazprimrez.com/',  label: 'Beyond Working' },
   { path: '#/contact',  label: 'Contact' },
 ];
 
