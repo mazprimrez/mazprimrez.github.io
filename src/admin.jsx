@@ -140,6 +140,15 @@ function LinesField({ label, hint, value, onChange, rows }) {
   );
 }
 
+// Several paragraphs in one box, split on blank lines. Stored as a list so the site keeps one <p> each.
+// split/join on exactly "\n\n" so extra newlines typed mid-edit survive the round trip.
+function ParagraphsField({ label, value, onChange, rows }) {
+  return (
+    <Field label={label} hint={"Leave a blank line between paragraphs. " + RICH_HINT} multiline rows={rows || 12}
+           value={value.join("\n\n")} onChange={v => onChange(v.split("\n\n"))} />
+  );
+}
+
 function ItemControls({ index, count, onMove, onRemove, removeLabel }) {
   return (
     <div className="adm-controls">
@@ -238,8 +247,8 @@ function AboutTab({ about, setAbout, busy, upload }) {
                onChange={v => setAbout(a => patch(a, { heading: v }))} />
         <ParagraphList label="Intro paragraphs (the last one gets the “read more” link)" items={about.intro}
                        onChange={v => setAbout(a => patch(a, { intro: v }))} />
-        <ParagraphList label="“Read more” story" items={about.story}
-                       onChange={v => setAbout(a => patch(a, { story: v }))} />
+        <ParagraphsField label="“Read more” story" value={about.story}
+                         onChange={v => setAbout(a => patch(a, { story: v }))} />
       </section>
     </React.Fragment>
   );
