@@ -49,6 +49,47 @@ function Home() {
 }
 
 /* ===================== ABOUT ===================== */
+/* Journey chart: each timeline entry becomes a bar on a time axis, read from its `when`
+   text ("Aug ’16 — Oct ’20", "May ’25 — Present", "2019"). */
+const MONTHS = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+// Start of the named month as a decimal year (e.g. 2016.58), or null without a year.
+function parseMonth(s) {
+  const y = s.match(/\b(\d{4})\b|[’'‘](\d{2})\b/);
+  if (!y) return null;
+  const m = MONTHS.indexOf((s.match(/[a-z]{3}/i) || [""])[0].toLowerCase());
+  return (y[1] ? +y[1] : 2000 + +y[2]) + Math.max(m, 0) / 12;
+}
+const shortYear = v => "’" + String(Math.floor(v)).slice(-2);
+
+function journeyChart(timeline) {
+  const d = new Date();
+  const now = d.getFullYear() + (d.getMonth() + 1) / 12;
+  const bars = timeline.map((t, i) => {
+    const parts = t.when.split(/\s*[—–-]\s*/);
+    const last = parts.length > 1 ? parts[parts.length - 1] : "";
+    const ongoing = /present|now|today/i.test(last);
+    const parsedStart = parseMonth(parts[0]);
+    const parsedEnd = ongoing ? null : parseMonth(last);
+    // Undated entries still get a (minimum-width) bar at the present end instead of vanishing.
+    const start = parsedStart === null ? now : parsedStart;
+    const end = ongoing || parsedStart === null ? now
+      : parsedEnd === null ? start + 1 / 12 : parsedEnd + 1 / 12;
+    const label = parsedStart === null ? t.when
+      : ongoing ? shortYear(start) + "~"
+      : parsedEnd === null || Math.floor(parsedEnd) === Math.floor(start) ? shortYear(start)
+      : shortYear(start) + "–" + shortYear(parsedEnd);
+    return { i, t, start, end, label };
+  }).sort((a, b) => b.start - a.start);
+  const from = Math.min(...bars.map(b => b.start));
+  const to = Math.max(now, ...bars.map(b => b.end));
+  const span = Math.max(to - from, 1);
+  bars.forEach(b => {
+    b.right = (to - b.end) / span * 100;
+    b.width = (b.end - b.start) / span * 100;
+  });
+  return { bars, span };
+}
+
 function About() {
   const content = useSiteContent();
   const [open, setOpen] = useStateP(null);
@@ -73,6 +114,7 @@ function About() {
   if (!content) return <main className="page about-page"></main>;
   const { about, timeline, skills } = content;
   const entry = open !== null ? timeline[open] : null;
+  const journey = journeyChart(timeline);
 
   return (
     <main className="page about-page">
@@ -118,23 +160,22 @@ function About() {
           </section>
         )}
 
-        <SecHead title="My journey so far" />
+        <SecHead eyebrow="where i’ve been ✿" title="My journey so far" />
         <p className="tl-hint reveal">← scroll left to travel back in time</p>
       </div>
 
       <div className="tl-scroll reveal">
-        <div className="tl-track">
-          {timeline.map((t, i) => (
-            <div className={"tl-item " + (i % 2 === 0 ? "up" : "down") + (t.highlight ? " latest" : "")} key={i}>
-              <button className="tl-card" type="button" onClick={() => setOpen(i)}>
-                {t.badge && <span className="tl-badge">{t.badge}</span>}
-                <div className="when">{t.when}</div>
-                <div className="role">{t.role}</div>
-                <div className="org">{t.org}</div>
-                <div className="desc">{t.desc}</div>
-                <span className="tl-more">read more →</span>
+        <div className="journey" style={{ '--years': journey.span.toFixed(2) }}>
+          {journey.bars.map(b => (
+            <div className="journey-row" key={b.i}>
+              <button className="journey-bar" type="button" title={b.t.when} onClick={() => setOpen(b.i)}
+                      style={{ right: b.right + '%', width: `max(${b.width}%, var(--bar-min))` }}>
+                <span className="journey-text">
+                  <span className="journey-org">{b.t.org}</span>
+                  <span className="journey-role">{b.t.role}</span>
+                </span>
+                <span className="journey-when">{b.label}</span>
               </button>
-              <span className="tl-dot"></span>
             </div>
           ))}
         </div>
