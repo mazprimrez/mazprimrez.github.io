@@ -5,8 +5,11 @@ const { useState: useStateA, useEffect: useEffectA, useRef: useRefA } = React;
 
 // Must match isAdmin() in the Firestore and Storage security rules.
 const ADMIN_EMAIL = "mazprimrez@gmail.com";
-const MAX_EDGE = 1600;
-const JPEG_QUALITY = 0.8;
+// A pixel budget rather than a max edge, so wide banners and tall portraits both stay sharp.
+// ~2× the largest size the site shows an image at (project thumbs ≈ 445×280 CSS px).
+const MAX_PIXELS = 800 * 800;
+const IMG_QUALITY = 0.8;
+const IMG_EXT = { "image/webp": "webp", "image/png": "png", "image/jpeg": "jpg" };
 
 firebase.initializeApp(FIREBASE_CONFIG);
 const fbAuth = firebase.auth();
@@ -37,7 +40,7 @@ function hasTransparency(ctx, w, h) {
 
 async function compressImage(file) {
   const img = await decodeImage(file);
-  const scale = Math.min(1, MAX_EDGE / Math.max(img.width, img.height));
+  const scale = Math.min(1, Math.sqrt(MAX_PIXELS / (img.width * img.height)));
   const w = Math.round(img.width * scale);
   const h = Math.round(img.height * scale);
   const canvas = document.createElement("canvas");
@@ -47,11 +50,17 @@ async function compressImage(file) {
   ctx.drawImage(img.source, 0, 0, w, h);
   img.done();
 
-  const png = file.type !== "image/jpeg" && hasTransparency(ctx, w, h);
-  const type = png ? "image/png" : "image/jpeg";
-  let blob = await new Promise(res => canvas.toBlob(res, type, JPEG_QUALITY));
+  // WebP is several times smaller than JPEG/PNG and keeps transparency. Browsers that can't
+  // encode it (older Safari) hand back a PNG instead, so fall back to JPEG/PNG there.
+  const toBlob = type => new Promise(res => canvas.toBlob(res, type, IMG_QUALITY));
+  let type = "image/webp";
+  let blob = await toBlob(type);
+  if (!blob || blob.type !== type) {
+    type = file.type !== "image/jpeg" && hasTransparency(ctx, w, h) ? "image/png" : "image/jpeg";
+    blob = await toBlob(type);
+  }
   if (scale === 1 && file.type === type && file.size <= blob.size) blob = file;
-  return { blob, type, ext: png ? "png" : "jpg" };
+  return { blob, type, ext: IMG_EXT[type] };
 }
 
 async function uploadImage(file, onProgress) {
