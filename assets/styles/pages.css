@@ -293,6 +293,7 @@
 .proj-card {
   background: var(--paper); border-radius: 8px; padding: 14px 14px 22px;
   box-shadow: var(--shadow-card); position: relative;
+  display: flex; flex-direction: column;
   transition: transform .25s, box-shadow .25s;
 }
 .proj-card:nth-child(odd) { transform: rotate(-1.1deg); }
@@ -306,11 +307,23 @@
   width: 100%; aspect-ratio: 16/10; object-fit: cover; border-radius: 5px;
   background: var(--pink-100); border: 1px solid var(--pink-150);
 }
-.proj-body { padding: 14px 8px 0; }
+.proj-body { padding: 14px 8px 0; display: flex; flex-direction: column; flex: 1; min-height: 0; }
 .proj-body .ptags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
 .proj-body h3 { font-size: 1.2rem; line-height: 1.25; }
-.proj-body p { color: var(--ink-soft); font-size: .94rem; margin: 8px 0 14px; }
-.proj-links { display: flex; flex-wrap: wrap; gap: 8px; }
+/* fixed-height description so every card is the same length; long text scrolls */
+.proj-body p {
+  color: var(--ink-soft); font-size: .94rem; line-height: 1.55; margin: 8px 0 14px;
+  height: calc(1.55em * 5); overflow-y: auto; padding-right: 8px;
+}
+/* Firefox only: Chrome/Safari drop the ::-webkit-scrollbar styling (and the always-visible bar) when these are set */
+@supports not selector(::-webkit-scrollbar) {
+  .proj-body p { scrollbar-width: thin; scrollbar-color: var(--pink-200) var(--pink-50); }
+}
+.proj-body p::-webkit-scrollbar { width: 7px; }
+.proj-body p::-webkit-scrollbar-track { background: var(--pink-50); border-radius: 999px; }
+.proj-body p::-webkit-scrollbar-thumb { background: var(--pink-200); border-radius: 999px; }
+.proj-body p::-webkit-scrollbar-thumb:hover { background: var(--pink-300); }
+.proj-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
 .proj-links a {
   font-weight: 700; font-size: .85rem; text-decoration: none;
   padding: 6px 13px; border-radius: 999px; border: 1.5px solid var(--ink);
