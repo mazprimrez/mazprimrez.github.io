@@ -59,7 +59,14 @@ function parseMonth(s) {
   const m = MONTHS.indexOf((s.match(/[a-z]{3}/i) || [""])[0].toLowerCase());
   return (y[1] ? +y[1] : 2000 + +y[2]) + Math.max(m, 0) / 12;
 }
+// "May" from "May ’25", or "" when the text names no month.
+const monthName = s => { const m = (s.match(/[a-z]{3}/i) || [""])[0]; return MONTHS.includes(m.toLowerCase()) ? m[0].toUpperCase() + m.slice(1, 3).toLowerCase() : ""; };
 const shortYear = v => "’" + String(Math.floor(v)).slice(-2);
+
+// Bars narrower than this can't fit their text and get stretched leftwards past their real start,
+// which made neighbouring roles look like they overlapped — so the axis is scaled to avoid that.
+const BAR_MIN_PX = 290;
+const PER_YEAR_MIN_PX = 150, PER_YEAR_MAX_PX = 400;
 
 function journeyChart(timeline) {
   const d = new Date();
@@ -72,13 +79,18 @@ function journeyChart(timeline) {
     const parsedEnd = ongoing ? null : parseMonth(last);
     // Undated entries still get a (minimum-width) bar at the present end instead of vanishing.
     const start = parsedStart === null ? now : parsedStart;
+    // The end month is exclusive, so "— May ’25" hands over cleanly to a role starting "May ’25 —".
     const end = ongoing || parsedStart === null ? now
-      : parsedEnd === null ? start + 1 / 12 : parsedEnd + 1 / 12;
+      : parsedEnd === null ? start + 1 / 12 : Math.max(parsedEnd, start + 1 / 12);
     const label = parsedStart === null ? t.when
       : ongoing ? shortYear(start) + "~"
       : parsedEnd === null || Math.floor(parsedEnd) === Math.floor(start) ? shortYear(start)
       : shortYear(start) + "–" + shortYear(parsedEnd);
-    return { i, t, start, end, label };
+    // Month detail under the years: "since May", "Apr – May", or just "Mar".
+    const m0 = parsedStart === null ? "" : monthName(parts[0]);
+    const m1 = ongoing || parsedEnd === null ? "" : monthName(last);
+    const sub = !m0 ? "" : ongoing ? "since " + m0 : m1 ? m0 + " – " + m1 : m0;
+    return { i, t, start, end, label, sub };
   }).sort((a, b) => b.start - a.start);
   const from = Math.min(...bars.map(b => b.start));
   const to = Math.max(now, ...bars.map(b => b.end));
@@ -87,7 +99,10 @@ function journeyChart(timeline) {
     b.right = (to - b.end) / span * 100;
     b.width = (b.end - b.start) / span * 100;
   });
-  return { bars, span };
+  // Pixels per year: enough that every role of six months or more draws at its true length.
+  const shortest = Math.min(Infinity, ...bars.map(b => b.end - b.start).filter(y => y >= 0.5));
+  const perYear = Math.min(PER_YEAR_MAX_PX, Math.max(PER_YEAR_MIN_PX, Math.ceil(BAR_MIN_PX / shortest)));
+  return { bars, span, perYear };
 }
 
 // Photos in the timeline popup: a sideways-scrolling strip.
@@ -175,7 +190,7 @@ function About() {
       </div>
 
       <div className="tl-scroll reveal">
-        <div className="journey" style={{ '--years': journey.span.toFixed(2) }}>
+        <div className="journey" style={{ '--years': journey.span.toFixed(2), '--per-year': journey.perYear + 'px', '--bar-min': BAR_MIN_PX + 'px' }}>
           {journey.bars.map(b => (
             <div className="journey-row" key={b.i}>
               <button className="journey-bar" type="button" title={b.t.when} onClick={() => setOpen(b.i)}
@@ -184,7 +199,10 @@ function About() {
                   <span className="journey-org">{b.t.org}</span>
                   <span className="journey-role">{b.t.role}</span>
                 </span>
-                <span className="journey-when">{b.label}</span>
+                <span className="journey-when">
+                  {b.label}
+                  {b.sub && <small>{b.sub}</small>}
+                </span>
               </button>
             </div>
           ))}

@@ -165,8 +165,8 @@
 .tl-scroll::-webkit-scrollbar-track { background: var(--pink-50); border-radius: 999px; }
 /* journey: one pill per role on a time axis, newest on top (bars placed in src/pages.jsx) */
 .journey {
-  --bar-min: 270px;   /* short roles still fit their text; they grow leftwards into the padding */
-  --per-year: 150px;
+  --bar-min: 290px;   /* short roles still fit their text; they grow leftwards into the padding */
+  --per-year: 150px;  /* both overridden inline from src/pages.jsx, which scales the axis to the data */
   box-sizing: content-box;
   width: calc(var(--years) * var(--per-year));
   padding: 0 max(20px, calc(50vw - 540px)) 0 max(calc(var(--bar-min) + 20px), calc(50vw - 540px));
@@ -187,7 +187,11 @@
 .journey-org, .journey-role { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .journey-org { font-weight: 800; font-size: 1.12rem; }
 .journey-role { font-size: .9rem; opacity: .9; }
-.journey-when { font-family: var(--hand); font-size: 2rem; white-space: nowrap; flex: none; }
+.journey-when {
+  font-family: var(--hand); font-size: 2rem; line-height: 1; white-space: nowrap; flex: none;
+  display: flex; flex-direction: column; align-items: flex-end;
+}
+.journey-when small { font-family: var(--sans); font-weight: 600; font-size: .72rem; letter-spacing: .02em; opacity: .85; margin-top: 4px; }
 .tl-badge {
   display: inline-block; background: #fff; color: var(--rose-600);
   font-weight: 800; font-size: .72rem; letter-spacing: .05em;
@@ -419,4 +423,5 @@
   .journey-org { font-size: 1rem; }
   .journey-role { font-size: .8rem; }
   .journey-when { font-size: 1.6rem; }
+  .journey-when small { font-size: .66rem; }
 }
