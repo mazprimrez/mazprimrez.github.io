@@ -715,6 +715,11 @@ function AdminApp() {
   };
   const signOut = () => fbAuth.signOut();
   const isAdmin = user && user.email === ADMIN_EMAIL && user.emailVerified;
+  // Mark this browser as the owner's, so index.html stops sending its visits to Google Analytics.
+  // Kept after sign-out on purpose: it's still the owner's device.
+  useEffectA(() => {
+    if (isAdmin) { try { localStorage.setItem('mz-owner', '1'); } catch (e) {} }
+  }, [isAdmin]);
 
   return (
     <div className="adm">
@@ -753,7 +758,7 @@ function AdminApp() {
 
         {isAdmin && (
           <React.Fragment>
-            <p className="adm-whoami">Signed in as {user.email}</p>
+            <p className="adm-whoami">Signed in as {user.email} · visits from this browser aren't counted in Analytics</p>
             <Editor />
           </React.Fragment>
         )}

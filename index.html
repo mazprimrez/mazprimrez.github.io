@@ -31,6 +31,13 @@
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
+    // Don't count the owner's own visits: any browser that has signed in to admin.html
+    // (flag set in src/admin.jsx), and local development.
+    try {
+      if (localStorage.getItem('mz-owner') === '1' || /^(localhost|127\.0\.0\.1)$/.test(location.hostname)) {
+        window['ga-disable-G-W2FM59DFEV'] = true;
+      }
+    } catch (e) {}
     gtag('js', new Date());
     gtag('config', 'G-W2FM59DFEV', { send_page_view: false });
   </script>
