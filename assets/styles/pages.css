@@ -53,7 +53,7 @@
 }
 .home-links { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding-left: 32px; }
 .home-link {
-  text-decoration: none; font-weight: 700; font-size: 1rem;
+  text-decoration: none; font-weight: 700; font-size: 1rem; white-space: nowrap;
   color: var(--h-muted); transition: color .2s;
 }
 .home-link:hover { color: var(--h-ink); }
@@ -412,6 +412,18 @@
   .home-page .home-ey { font-size: 22px; }
   .home-page .home-h1 { font-size: 48px; }
   .home-page .home-sub { font-size: 19px; margin-bottom: 20px; }
+}
+/* narrow phones: the two landing columns no longer fit side by side, so stack them */
+@media (max-width: 380px) {
+  .home-page .home-split { grid-template-columns: 1fr; row-gap: 16px; }
+  .home-page .home-exp { text-align: center; padding: 0; border-right: 0; }
+  .home-page .home-rotate { justify-items: center; }
+  .home-page .home-links { flex-direction: row; justify-content: center; gap: 22px; padding-left: 0; }
+  .home-page .home-sub { margin-bottom: 22px; }
+}
+@media (max-width: 330px) {
+  .home-page .home-h1 { font-size: 44px; }
+  .home-page .home-sub { font-size: 18px; }
 }
 @media (max-width: 1024px) {
   .proj-grid { grid-template-columns: repeat(2, 1fr); }
