@@ -330,9 +330,15 @@ function Nav({ route }) {
         <ul className="nav-links">
           {NAV.map(n => (
             <li key={n.path}>
-              {/* Links to other sites (e.g. the hobbies blog) open in a new tab. */}
+              {/* Links to other sites (e.g. the hobbies blog) open in a new tab, marked with a ↗ arrow. */}
               {n.path.startsWith("http")
-                ? <a href={n.path} target="_blank" rel="noreferrer">{n.label}</a>
+                ? <a href={n.path} target="_blank" rel="noreferrer" className="ext" title="Opens blog.mazprimrez.com in a new tab">
+                    {n.label}
+                    <svg className="ext-arrow" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+                      <path d="M3 9 9 3M4.5 3H9v4.5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span className="sr-only">(opens in a new tab)</span>
+                  </a>
                 : <a href={n.path} className={route === n.path ? "active" : ""}>{n.label}</a>}
             </li>
           ))}
