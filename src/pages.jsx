@@ -59,8 +59,6 @@ function parseMonth(s) {
   const m = MONTHS.indexOf((s.match(/[a-z]{3}/i) || [""])[0].toLowerCase());
   return (y[1] ? +y[1] : 2000 + +y[2]) + Math.max(m, 0) / 12;
 }
-// "May" from "May ’25", or "" when the text names no month.
-const monthName = s => { const m = (s.match(/[a-z]{3}/i) || [""])[0]; return MONTHS.includes(m.toLowerCase()) ? m[0].toUpperCase() + m.slice(1, 3).toLowerCase() : ""; };
 const shortYear = v => "’" + String(Math.floor(v)).slice(-2);
 
 // Axis scale, and the pill widths needed to fit text: with the dates inside, or with only the
@@ -83,15 +81,12 @@ function journeyChart(timeline) {
     // The end month is exclusive, so "— May ’25" hands over cleanly to a role starting "May ’25 —".
     const end = ongoing || parsedStart === null ? now
       : parsedEnd === null ? start + 1 / 12 : Math.max(parsedEnd, start + 1 / 12);
+    // Years only ("’24 – ’25", "’25 – Present", "’23"); the exact months are in the popup.
     const label = parsedStart === null ? t.when
-      : ongoing ? shortYear(start) + "~"
+      : ongoing ? shortYear(start) + " – Present"
       : parsedEnd === null || Math.floor(parsedEnd) === Math.floor(start) ? shortYear(start)
-      : shortYear(start) + "–" + shortYear(parsedEnd);
-    // Month detail under the years: "since May", "Apr – May", or just "Mar".
-    const m0 = parsedStart === null ? "" : monthName(parts[0]);
-    const m1 = ongoing || parsedEnd === null ? "" : monthName(last);
-    const sub = !m0 ? "" : ongoing ? "since " + m0 : m1 ? m0 + " – " + m1 : m0;
-    return { i, t, start, end, label, sub };
+      : shortYear(start) + " – " + shortYear(parsedEnd);
+    return { i, t, start, end, label };
   }).sort((a, b) => b.start - a.start);
   const from = Math.min(...bars.map(b => b.start));
   const to = Math.max(now, ...bars.map(b => b.end));
@@ -193,7 +188,7 @@ function About() {
           {journey.bars.map(b => {
             const minW = (b.compact ? BAR_MIN_COMPACT_PX : BAR_MIN_PX) + 'px';
             const width = `max(${b.width}%, ${minW})`;
-            const when = <>{b.label}{b.sub && <small>{b.sub}</small>}</>;
+            const when = b.label;
             return (
             <div className={"journey-row" + (b.compact ? " compact" : "")} key={b.i}>
               <button className="journey-bar" type="button" title={b.t.when} onClick={() => setOpen(b.i)}

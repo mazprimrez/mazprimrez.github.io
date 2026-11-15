@@ -170,7 +170,7 @@
   box-sizing: content-box;
   width: calc(var(--years) * var(--per-year));
   /* right padding leaves room for a short ongoing role's dates, which sit outside its pill */
-  padding: 0 max(110px, calc(50vw - 540px)) 0 max(calc(var(--bar-min) + 20px), calc(50vw - 540px));
+  padding: 0 max(180px, calc(50vw - 540px)) 0 max(calc(var(--bar-min) + 20px), calc(50vw - 540px));
   display: flex; flex-direction: column; gap: 16px;
 }
 .journey-row { position: relative; height: 70px; }
@@ -189,10 +189,9 @@
 .journey-org { font-weight: 800; font-size: 1.12rem; }
 .journey-role { font-size: .9rem; opacity: .9; }
 .journey-when {
-  font-family: var(--hand); font-size: 2rem; line-height: 1; white-space: nowrap; flex: none;
+  font-family: var(--hand); font-size: 1.35rem; font-weight: 600; line-height: 1; white-space: nowrap; flex: none;
   display: flex; flex-direction: column; align-items: flex-end;
 }
-.journey-when small { font-family: var(--sans); font-weight: 600; font-size: .72rem; letter-spacing: .02em; opacity: .85; margin-top: 4px; }
 /* short roles: the dates move out of the pill to its left, in the pill's colour */
 .journey-row.compact .journey-bar .journey-when { display: none; }
 .journey-when.outside { position: absolute; top: 0; bottom: 0; justify-content: center; align-items: flex-start; color: var(--rose-700); pointer-events: none; }
@@ -426,8 +425,7 @@
   .journey-bar { position: static; width: 100% !important; height: 100%; padding: 0 20px 0 22px; } /* beats the inline chart sizing */
   .journey-org { font-size: 1rem; }
   .journey-role { font-size: .8rem; }
-  .journey-when { font-size: 1.6rem; }
-  .journey-when small { font-size: .66rem; }
+  .journey-when { font-size: 1.15rem; }
   .journey-when.outside { display: none; }
   .journey-row.compact .journey-bar .journey-when { display: flex; }
 }
