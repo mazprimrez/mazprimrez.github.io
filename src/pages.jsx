@@ -63,10 +63,11 @@ function parseMonth(s) {
 const monthName = s => { const m = (s.match(/[a-z]{3}/i) || [""])[0]; return MONTHS.includes(m.toLowerCase()) ? m[0].toUpperCase() + m.slice(1, 3).toLowerCase() : ""; };
 const shortYear = v => "’" + String(Math.floor(v)).slice(-2);
 
-// Bars narrower than this can't fit their text and get stretched leftwards past their real start,
-// which made neighbouring roles look like they overlapped — so the axis is scaled to avoid that.
-const BAR_MIN_PX = 290;
-const PER_YEAR_MIN_PX = 150, PER_YEAR_MAX_PX = 400;
+// Axis scale, and the pill widths needed to fit text: with the dates inside, or with only the
+// organisation + role inside ("compact" — the dates then sit just left of the pill). Short roles
+// used to be stretched leftwards to fit, which made neighbouring roles look like they overlapped.
+const PER_YEAR_PX = 150;
+const BAR_MIN_PX = 290, BAR_MIN_COMPACT_PX = 150;
 
 function journeyChart(timeline) {
   const d = new Date();
@@ -98,11 +99,9 @@ function journeyChart(timeline) {
   bars.forEach(b => {
     b.right = (to - b.end) / span * 100;
     b.width = (b.end - b.start) / span * 100;
+    b.compact = (b.end - b.start) * PER_YEAR_PX < BAR_MIN_PX;
   });
-  // Pixels per year: enough that every role of six months or more draws at its true length.
-  const shortest = Math.min(Infinity, ...bars.map(b => b.end - b.start).filter(y => y >= 0.5));
-  const perYear = Math.min(PER_YEAR_MAX_PX, Math.max(PER_YEAR_MIN_PX, Math.ceil(BAR_MIN_PX / shortest)));
-  return { bars, span, perYear };
+  return { bars, span };
 }
 
 // Photos in the timeline popup: a sideways-scrolling strip.
@@ -190,22 +189,29 @@ function About() {
       </div>
 
       <div className="tl-scroll reveal">
-        <div className="journey" style={{ '--years': journey.span.toFixed(2), '--per-year': journey.perYear + 'px', '--bar-min': BAR_MIN_PX + 'px' }}>
-          {journey.bars.map(b => (
-            <div className="journey-row" key={b.i}>
+        <div className="journey" style={{ '--years': journey.span.toFixed(2), '--per-year': PER_YEAR_PX + 'px', '--bar-min': BAR_MIN_PX + 'px' }}>
+          {journey.bars.map(b => {
+            const minW = (b.compact ? BAR_MIN_COMPACT_PX : BAR_MIN_PX) + 'px';
+            const width = `max(${b.width}%, ${minW})`;
+            const when = <>{b.label}{b.sub && <small>{b.sub}</small>}</>;
+            return (
+            <div className={"journey-row" + (b.compact ? " compact" : "")} key={b.i}>
               <button className="journey-bar" type="button" title={b.t.when} onClick={() => setOpen(b.i)}
-                      style={{ right: b.right + '%', width: `max(${b.width}%, var(--bar-min))` }}>
+                      style={{ right: b.right + '%', width }}>
                 <span className="journey-text">
                   <span className="journey-org">{b.t.org}</span>
                   <span className="journey-role">{b.t.role}</span>
                 </span>
-                <span className="journey-when">
-                  {b.label}
-                  {b.sub && <small>{b.sub}</small>}
-                </span>
+                <span className="journey-when">{when}</span>
               </button>
+              {/* Short roles: dates sit just right of the pill (hidden on phones, where the pill is full width). */}
+              {b.compact && (
+                <span className="journey-when outside" aria-hidden="true"
+                      style={{ left: `calc(100% - ${b.right}% + 12px)` }}>{when}</span>
+              )}
             </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

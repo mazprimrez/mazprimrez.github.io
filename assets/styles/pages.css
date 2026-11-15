@@ -165,11 +165,12 @@
 .tl-scroll::-webkit-scrollbar-track { background: var(--pink-50); border-radius: 999px; }
 /* journey: one pill per role on a time axis, newest on top (bars placed in src/pages.jsx) */
 .journey {
-  --bar-min: 290px;   /* short roles still fit their text; they grow leftwards into the padding */
-  --per-year: 150px;  /* both overridden inline from src/pages.jsx, which scales the axis to the data */
+  --bar-min: 290px;   /* both set inline from src/pages.jsx; kept here as fallbacks */
+  --per-year: 150px;
   box-sizing: content-box;
   width: calc(var(--years) * var(--per-year));
-  padding: 0 max(20px, calc(50vw - 540px)) 0 max(calc(var(--bar-min) + 20px), calc(50vw - 540px));
+  /* right padding leaves room for a short ongoing role's dates, which sit outside its pill */
+  padding: 0 max(110px, calc(50vw - 540px)) 0 max(calc(var(--bar-min) + 20px), calc(50vw - 540px));
   display: flex; flex-direction: column; gap: 16px;
 }
 .journey-row { position: relative; height: 70px; }
@@ -192,6 +193,9 @@
   display: flex; flex-direction: column; align-items: flex-end;
 }
 .journey-when small { font-family: var(--sans); font-weight: 600; font-size: .72rem; letter-spacing: .02em; opacity: .85; margin-top: 4px; }
+/* short roles: the dates move out of the pill to its left, in the pill's colour */
+.journey-row.compact .journey-bar .journey-when { display: none; }
+.journey-when.outside { position: absolute; top: 0; bottom: 0; justify-content: center; align-items: flex-start; color: var(--rose-700); pointer-events: none; }
 .tl-badge {
   display: inline-block; background: #fff; color: var(--rose-600);
   font-weight: 800; font-size: .72rem; letter-spacing: .05em;
@@ -424,4 +428,6 @@
   .journey-role { font-size: .8rem; }
   .journey-when { font-size: 1.6rem; }
   .journey-when small { font-size: .66rem; }
+  .journey-when.outside { display: none; }
+  .journey-row.compact .journey-bar .journey-when { display: flex; }
 }
