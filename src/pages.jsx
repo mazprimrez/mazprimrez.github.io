@@ -4,46 +4,31 @@
 const { useState: useStateP, useEffect: useEffectP } = React;
 
 /* ===================== HOME ===================== */
+/* One calm screen: nav on top, this hero fills the middle, footer at the bottom (styles: .home-* in pages.css). */
 function Home() {
-  useReveal();
-  const doItems = [
-    { ic: '🤖', label: 'Generative AI', tip: 'Building AI tools that automate daily tasks and boost productivity.' },
-    { ic: '📈', label: 'End-to-End ML', tip: 'Recommendation systems, churn prediction, media investment — data to deployment.' },
-    { ic: '🎓', label: 'Teaching & Mentoring', tip: 'Helping the next wave of data scientists find their footing.' },
-  ];
   return (
     <main className="page home-page">
-      <div className="wrap home-inner">
-        <section className="hero">
-          <div className="hero-text">
-            <span className="eyebrow hero-ey">hi there, welcome!</span>
-            <h1>
-              I’m <span className="name">Mazi</span> <span className="wave">👋🏼</span>
-            </h1>
-            <p className="role">An <span className="hl">AI Engineer</span> &amp; <span className="hl">Data Scientist</span></p>
-            <p className="lead">
-              With 5+ years of experience building AI &amp; ML solutions powered by
-              millions of data.
+      <section className="home-hero">
+        <span className="home-ey">hi there, welcome!</span>
+        <h1 className="home-h1">I’m Mazi <span className="wave" aria-hidden="true">👋🏼</span></h1>
+        <p className="home-sub">AI engineer &amp; data scientist, <em>from Jakarta</em></p>
+        {/* Two columns: what I do (the phrase fades between three things, CSS only) | where to go next. */}
+        <div className="home-split">
+          <div className="home-exp">
+            <p className="home-body">5+ years of experience in</p>
+            <p className="home-rotate" aria-hidden="true">
+              <span>generative AI</span>
+              <span>end-to-end ML</span>
+              <span>teaching &amp; mentoring</span>
             </p>
-
-            {/* What I get up to — compact icon chips */}
-            <span className="eyebrow do-ey">this is what i do ✿</span>
-            <div className="do-row">
-              {doItems.map(d => (
-                <div className="do-chip" key={d.label} title={d.tip}>
-                  <span className="ic">{d.ic}</span>
-                  <span className="do-label">{d.label}</span>
-                </div>
-              ))}
-            </div>
-
-            <div className="hero-cta">
-              <a className="btn" href="#/contact">Say hello →</a>
-              <a className="btn ghost" href="#/about">Read my story →</a>
-            </div>
+            <span className="sr-only">generative AI, end-to-end ML, and teaching &amp; mentoring</span>
           </div>
-        </section>
-      </div>
+          <div className="home-links">
+            <a className="home-link primary" href="#/about">get to know me →</a>
+            <a className="home-link" href="#/contact">say hello →</a>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
