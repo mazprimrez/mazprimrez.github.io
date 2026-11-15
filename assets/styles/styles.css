@@ -198,9 +198,16 @@ h1, h2, h3 { font-family: var(--serif); font-weight: 500; color: var(--ink); mar
   color: var(--ink-faint); font-size: .9rem;
 }
 .footer .heart { color: var(--rose-400); }
+.footer-copy { white-space: nowrap; }   /* wraps as one piece on narrow screens */
 .footer-soc { display: flex; gap: 16px; }
 .footer-soc a { color: var(--ink-soft); text-decoration: none; font-weight: 600; }
 .footer-soc a:hover { color: var(--rose-600); }
+/* phones: a compact, centred footer */
+@media (max-width: 520px) {
+  .footer { padding: 14px 0; }
+  .footer-inner { padding: 0 16px; justify-content: center; text-align: center; gap: 4px 14px; font-size: .76rem; line-height: 1.45; }
+  .footer-soc { gap: 14px; }
+}
 
 /* ============================================================
    Scroll reveal

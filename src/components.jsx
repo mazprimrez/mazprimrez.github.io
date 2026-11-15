@@ -353,7 +353,7 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="footer-inner">
-        <span>Made with Claude, human touch, and a little <span className="heart">♥</span> © {new Date().getFullYear()} Mazi Prima Reza</span>
+        <span>Made with Claude, human touch, and a little <span className="heart">♥</span> <span className="footer-copy">© {new Date().getFullYear()} Mazi Prima Reza</span></span>
         <div className="footer-soc">
           <a href="https://github.com/mazprimrez" target="_blank" rel="noreferrer">GitHub</a>
           <a href="https://www.linkedin.com/in/maziprimareza/" target="_blank" rel="noreferrer">LinkedIn</a>
