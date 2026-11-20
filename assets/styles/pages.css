@@ -2,63 +2,93 @@
    Page-specific styles
    ============================================================ */
 
-/* ---------------- HOME (one screen, no scroll) ---------------- */
+/* ---------------- HOME ("Margin notes") ---------------- */
 /* Same palette as blog.mazprimrez.com, scoped to the landing page only. */
 .home-page {
   --h-ink: #33242b;
-  --h-body: #6e5a64;
-  --h-muted: #8c7480;
+  --h-sub: #4a3540;
+  --h-body: #6e5762;
   --h-rose: #b94a74;
-  --h-rose-hover: #8e3558;
+  --h-rose-hover: #a23f65;
+  --h-doodle: #d77fa1;   /* hand-drawn strokes: arrows, oval, squiggle */
+  --h-hl: #fbccdd;       /* highlighter band */
   display: flex; flex-direction: column; padding-bottom: 0;
 }
 #root:has(.home-page) { min-height: 100vh; min-height: 100dvh; }
-.home-hero {
-  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 24px 20px 40px;
+/* fills the space between nav and footer; the content sits in the middle of it, left-aligned */
+.home-hero { flex: 1; display: flex; align-items: center; padding: 56px 0 72px; }
+.home-inner { text-align: left; }
+
+/* decoration never takes clicks or focus */
+.home-note, .home-doodle { pointer-events: none; }
+.home-doodle { fill: none; stroke: var(--h-doodle); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; overflow: visible; }
+.home-note-text { font-family: var(--hand); font-weight: 600; font-size: 30px; line-height: 1; color: var(--h-rose); white-space: nowrap; }
+
+/* name + "welcome!" note: the note hangs off the h1's top-right corner */
+.home-title { position: relative; display: inline-block; max-width: 100%; margin-bottom: 36px; }
+.home-h1 {
+  font-family: var(--serif); font-weight: 500; font-size: clamp(60px, 8vw, 96px);
+  line-height: 1; letter-spacing: -0.03em; color: var(--h-ink); margin: 0;
 }
-.home-ey { font-family: var(--hand); font-size: 28px; font-weight: 600; line-height: 1.2; color: var(--h-rose); }
-.home-h1 { font-size: 76px; letter-spacing: -0.02em; margin: 6px 0 14px; color: var(--h-ink); }
-.home-h1 .wave { display: inline-block; transform-origin: 70% 70%; animation: wave 2.4s ease-in-out infinite; }
-@keyframes wave {
-  0%, 60%, 100% { transform: rotate(0); }
-  10%, 30% { transform: rotate(14deg); }
-  20% { transform: rotate(-8deg); }
-  40% { transform: rotate(-4deg); }
-  50% { transform: rotate(10deg); }
+.home-welcome { position: absolute; left: 100%; bottom: 100%; margin: 0 0 -46px 4px; display: flex; flex-direction: column; align-items: flex-start; }
+.home-welcome .home-note-text { display: block; transform: rotate(-7deg); transform-origin: left bottom; }
+.home-welcome-arrow { width: 32px; height: 28px; margin: 6px 0 0 6px; }
+.home-welcome-arrow-down { display: none; }
+
+/* subtitle: two lines, with a highlighter band under "millions of data" */
+.home-sub {
+  font-family: var(--serif); font-weight: 400; font-size: clamp(26px, 3vw, 36px);
+  line-height: 1.3; letter-spacing: -0.01em; color: var(--h-sub); margin: 0 0 28px;
 }
-.home-sub { font-family: var(--serif); font-size: 27px; letter-spacing: -0.01em; line-height: 1.2; color: var(--h-body); margin: 0 0 38px; }
-.home-sub em { font-family: var(--hand); font-style: normal; font-weight: 700; font-size: 1.2em; color: var(--h-rose); white-space: nowrap; }
-/* two columns split down the page's centre line: what I do | where to go next */
-.home-split { display: grid; grid-template-columns: 1fr 1fr; align-items: center; width: 100%; max-width: 580px; }
-.home-exp { text-align: right; padding: 4px 32px 4px 0; border-right: 1px solid #ebd3dc; }
-.home-body { margin: 0; font-size: .95rem; color: var(--h-muted); }
-/* the three phrases share one grid cell and take turns: each is visible for a third of the cycle */
-.home-rotate {
-  display: grid; justify-items: end; margin: 0;
-  font-family: var(--hand); font-weight: 700; font-size: 30px; line-height: 1.25; color: var(--h-rose);
+.home-line { display: block; }
+.home-hl {
+  color: inherit; background: linear-gradient(transparent 65%, var(--h-hl) 65%);
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
 }
-.home-rotate span { grid-area: 1 / 1; opacity: 0; white-space: nowrap; animation: homeRotate 7.5s infinite; }
-.home-rotate span:nth-child(2) { animation-delay: 2.5s; }
-.home-rotate span:nth-child(3) { animation-delay: 5s; }
-@keyframes homeRotate {
-  0% { opacity: 0; transform: translateY(8px); }
-  5%, 28% { opacity: 1; transform: none; }
-  33.3%, 100% { opacity: 0; transform: translateY(-8px); }
+.home-rows { display: inline-flex; align-items: center; gap: 8px; margin-left: 22px; vertical-align: 0.1em; }
+.home-rows .home-note-text { display: inline-block; transform: rotate(-4deg); }
+.home-rows-arrow { width: 38px; height: 18px; }
+@media (max-width: 760px) { .home-rows { display: none; } }
+
+.home-body { font-family: var(--sans); font-size: 18px; line-height: 1.65; color: var(--h-body); max-width: 540px; margin: 0 0 40px; }
+/* "Jakarta": the oval is drawn inside the word's own padding, so it never touches its neighbours */
+.home-circled { position: relative; display: inline-block; padding: 0 .45em; font-weight: 700; color: var(--h-ink); }
+.home-oval { position: absolute; inset: -0.1em 0 -0.15em; width: 100%; height: calc(100% + .25em); }
+.home-oval path, .home-squiggle path { vector-effect: non-scaling-stroke; }
+
+/* actions */
+.home-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 36px; }
+.home-btn, .home-link { display: inline-flex; align-items: center; gap: 10px; font-family: var(--sans); font-weight: 800; font-size: 17px; text-decoration: none; white-space: nowrap; }
+.home-btn {
+  min-height: 50px; padding: 0 28px; border-radius: 999px;
+  background: var(--h-rose); color: #fff;
+  box-shadow: 0 12px 26px -10px rgba(185, 74, 116, .55);
+  transition: background-color .2s;
 }
-/* reduced motion (animations are switched off globally): list all three, stacked */
-@media (prefers-reduced-motion: reduce) {
-  .home-rotate { display: block; font-size: 22px; }
-  .home-rotate span { display: block; opacity: 1; }
-}
-.home-links { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; padding-left: 32px; }
-.home-link {
-  text-decoration: none; font-weight: 700; font-size: 1rem; white-space: nowrap;
-  color: var(--h-muted); transition: color .2s;
-}
+.home-btn:hover { background: var(--h-rose-hover); color: #fff; }
+.home-link { position: relative; padding: 6px 0 10px; color: var(--h-sub); transition: color .2s; }
 .home-link:hover { color: var(--h-ink); }
-.home-link.primary { color: var(--h-rose); }
-.home-link.primary:hover { color: var(--h-rose-hover); }
+.home-squiggle { position: absolute; left: 0; bottom: 0; width: 100%; height: 8px; }
+.home-go { flex: none; fill: none; stroke: currentColor; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; transition: transform .2s ease; }
+.home-btn:hover .home-go, .home-btn:focus-visible .home-go,
+.home-link:hover .home-go, .home-link:focus-visible .home-go { transform: translateX(3px); }
+@media (prefers-reduced-motion: reduce) {
+  .home-btn:hover .home-go, .home-btn:focus-visible .home-go,
+  .home-link:hover .home-go, .home-link:focus-visible .home-go { transform: none; }
+}
+
+/* phones: "welcome!" moves above the name, right-aligned, with its arrow pointing down at it */
+@media (max-width: 620px) {
+  .home-hero { padding: 32px 0 48px; }
+  .home-inner { padding: 0 20px; }
+  .home-title { display: inline-flex; flex-direction: column; margin-bottom: 28px; }
+  .home-welcome { position: static; order: -1; align-self: flex-end; flex-direction: row; align-items: flex-end; gap: 4px; margin: 0 2px 8px 0; }
+  .home-welcome .home-note-text { transform-origin: center; }
+  .home-welcome-arrow { display: none; }
+  .home-welcome-arrow-down { display: block; order: -1; width: 22px; height: 28px; margin-bottom: -6px; }
+  .home-line { display: inline; }
+  .home-body { margin-bottom: 32px; }
+}
 
 /* photo / polaroid in hero */
 .hero-photo {
@@ -406,25 +436,6 @@
 .contact-row .go { margin-left: auto; font-family: var(--hand); font-size: 1.3rem; color: var(--rose-500); }
 
 /* ---------------- responsive ---------------- */
-/* short phones (e.g. 360×640): tighten the landing so it still fits one screen */
-@media (max-width: 520px) and (max-height: 650px) {
-  .home-page .home-hero { padding: 8px 16px 14px; }
-  .home-page .home-ey { font-size: 22px; }
-  .home-page .home-h1 { font-size: 48px; }
-  .home-page .home-sub { font-size: 19px; margin-bottom: 20px; }
-}
-/* narrow phones: the two landing columns no longer fit side by side, so stack them */
-@media (max-width: 380px) {
-  .home-page .home-split { grid-template-columns: 1fr; row-gap: 16px; }
-  .home-page .home-exp { text-align: center; padding: 0; border-right: 0; }
-  .home-page .home-rotate { justify-items: center; }
-  .home-page .home-links { flex-direction: row; justify-content: center; gap: 22px; padding-left: 0; }
-  .home-page .home-sub { margin-bottom: 22px; }
-}
-@media (max-width: 330px) {
-  .home-page .home-h1 { font-size: 44px; }
-  .home-page .home-sub { font-size: 18px; }
-}
 @media (max-width: 1024px) {
   .proj-grid { grid-template-columns: repeat(2, 1fr); }
 }
@@ -435,17 +446,6 @@
   .facts { max-width: 460px; margin-inline: auto; }
 }
 @media (max-width: 520px) {
-  /* landing still fits one screen at 375×667 */
-  .home-hero { padding: 12px 16px 24px; }
-  .home-ey { font-size: 23px; }
-  .home-h1 { font-size: 52px; margin: 2px 0 8px; }
-  .home-sub { font-size: 20px; margin-bottom: 28px; }
-  .home-split { grid-template-columns: auto auto; justify-content: center; }
-  .home-exp { padding-right: 16px; }
-  .home-body { font-size: 13px; }
-  .home-rotate { font-size: 23px; }
-  .home-links { padding-left: 16px; gap: 10px; }
-  .home-link { font-size: .9rem; }
   .facts { grid-template-columns: 1fr; }
   /* phones: a plain stacked list, latest first, instead of the time chart */
   .tl-hint { display: none; }

@@ -4,28 +4,69 @@
 const { useState: useStateP, useEffect: useEffectP } = React;
 
 /* ===================== HOME ===================== */
-/* One calm screen: nav on top, this hero fills the middle, footer at the bottom (styles: .home-* in pages.css). */
+/* "Margin notes": a left-aligned hero between the nav and the footer, with handwritten notes and
+   doodles in the margins (styles: .home-* in pages.css). Notes and doodles are decoration only. */
+const HomeArrow = () => (
+  <svg className="home-go" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" focusable="false">
+    <path d="M2.5 8h10M8.5 3.5 13 8l-4.5 4.5" />
+  </svg>
+);
+
 function Home() {
   return (
     <main className="page home-page">
       <section className="home-hero">
-        <span className="home-ey">hi there, welcome!</span>
-        <h1 className="home-h1">I’m Mazi <span className="wave" aria-hidden="true">👋🏼</span></h1>
-        <p className="home-sub">AI engineer &amp; data scientist, <em>from Jakarta</em></p>
-        {/* Two columns: what I do (the phrase fades between three things, CSS only) | where to go next. */}
-        <div className="home-split">
-          <div className="home-exp">
-            <p className="home-body">5+ years of experience in</p>
-            <p className="home-rotate" aria-hidden="true">
-              <span>generative AI</span>
-              <span>end-to-end ML</span>
-              <span>teaching &amp; mentoring</span>
-            </p>
-            <span className="sr-only">generative AI, end-to-end ML, and teaching &amp; mentoring</span>
+        <div className="wrap home-inner">
+          <div className="home-title">
+            <h1 className="home-h1">Hi, I’m Mazi</h1>
+            <span className="home-note home-welcome" aria-hidden="true">
+              <span className="home-note-text">welcome!</span>
+              {/* desktop: curls down-left onto the name */}
+              <svg className="home-doodle home-welcome-arrow" viewBox="0 0 40 34">
+                <path d="M37 3C25 5 13 12 6 29" />
+                <path d="M3 18.5 6 29.5 15.5 24" />
+              </svg>
+              {/* phones: drops straight down onto the name */}
+              <svg className="home-doodle home-welcome-arrow-down" viewBox="0 0 30 36">
+                <path d="M26 3C14 6 8 16 11 32" />
+                <path d="M4 25.5 11 33 17 24.5" />
+              </svg>
+            </span>
           </div>
-          <div className="home-links">
-            <a className="home-link primary" href="#/about">get to know me →</a>
-            <a className="home-link" href="#/contact">say hello →</a>
+
+          <p className="home-sub">
+            <span className="home-line">Building AI &amp; ML products,</span>{" "}
+            <span className="home-line">
+              powered by <mark className="home-hl">millions of data</mark>.
+              <span className="home-note home-rows" aria-hidden="true">
+                <svg className="home-doodle home-rows-arrow" viewBox="0 0 44 20">
+                  <path d="M42 11C32 7 20 8 4 12" />
+                  <path d="M12 3.5 3.5 12 13 18" />
+                </svg>
+                <span className="home-note-text">(a lot of rows!)</span>
+              </span>
+            </span>
+          </p>
+
+          <p className="home-body">
+            Data scientist &amp; AI engineer in{" "}
+            <strong className="home-circled">
+              Jakarta
+              <svg className="home-doodle home-oval" viewBox="0 0 100 40" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M58 4.5C82 3 97 10 97 20s-18 17-47 17S3 31 3 20 22 3.5 46 4c9 0 16 1.5 22 4" />
+              </svg>
+            </strong>
+            . 5+ years in generative AI, end-to-end ML, and teaching &amp; mentoring.
+          </p>
+
+          <div className="home-actions">
+            <a className="home-btn" href="#/about">get to know me <HomeArrow /></a>
+            <a className="home-link" href="#/projects">
+              see my projects <HomeArrow />
+              <svg className="home-doodle home-squiggle" viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true">
+                <path d="M2 6.5C30 8.5 58 3 96 5s70 3 102-2" />
+              </svg>
+            </a>
           </div>
         </div>
       </section>
